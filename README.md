@@ -311,13 +311,13 @@
   | title | string | null: false |
   | info | text | null: false |
   | admin_name | string | null: false |
-  | progress_setting | string | null: false |
-  | parameter_setting | string | null: false |
-  | tag_setting | string | null: false |
-  | nice_setting | string | null: false |
-  | publish_range | string | null: false |
-  | topic_range | string | null: false |
-  | comment_range | string | null: false |
+  | progress_setting | integer | null: false |
+  | parameter_setting | integer | null: false |
+  | tag_setting | integer | null: false |
+  | nice_setting | integer | null: false |
+  | publish_range | integer | null: false |
+  | topic_range | integer | null: false |
+  | comment_range | integer | null: false |
   | user | references | null: false, foreign_key: true |
 - #### Association
   has_many :niche_progress_groups, dependent: :destroy  
@@ -337,7 +337,7 @@
   | last_name | string |  |
   | last_name_kana | string |  |
   | postal_code | 	string |  |
-  | prefecture_id | integer | null: false, default: 0 |
+  | prefecture_id | integer |  |
   | city | string |  |
   | address | string |  |
   | building | string |  |
