@@ -1,0 +1,2 @@
+class NicheProgressTask < ApplicationRecord
+end

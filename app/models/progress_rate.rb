@@ -1,0 +1,2 @@
+class ProgressRate < ApplicationRecord
+end
