@@ -4,4 +4,5 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   belongs_to :user
   belongs_to :niche
+  has_one_attached :image
 end
