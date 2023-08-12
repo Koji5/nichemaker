@@ -1,0 +1,2 @@
+class PostParameter < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class NicheParameter < ApplicationRecord
+end
