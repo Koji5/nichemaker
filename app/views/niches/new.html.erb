@@ -1,0 +1,41 @@
+<%= render "shared/header" %>
+<div>
+<%= form_with model: @niche, local: true do |f| %>
+  <%# render 'shared/error_messages', model: f.object %>
+  <h2>ニッチ作成</h2>
+  <div>
+    タイトル：<%= f.text_field :title, id:"title" %>
+  </div>
+  <div>
+    説明：<%= f.text_area :info ,rows:"7", id:"info" %>
+  </div>
+  <div>
+    管理者名：<%= f.text_field :admin_name, id:"admin_name" %>
+  </div>
+  <div>
+    進捗状況機能使用：<%= f.collection_select(:progress_setting, HChoice.all, :id, :name, {}, {class:"select-box", id:"progress_setting"}) %>
+  </div>
+  <div>
+    独自パラメーター機能使用：<%= f.collection_select(:parameter_setting, HChoice.all, :id, :name, {}, {class:"select-box", id:"parameter_setting"}) %>
+  </div>
+  <div>
+    タグ機能使用：<%= f.collection_select(:tag_setting, HChoice.all, :id, :name, {}, {class:"select-box", id:"tag_setting"}) %>
+  </div>
+  <div>
+    いいね！機能使用：<%= f.collection_select(:nice_setting, HChoice.all, :id, :name, {}, {class:"select-box", id:"nice_setting"}) %>
+  </div>
+  <div>
+    公開範囲：<%= f.collection_select(:publish_range, HPermissibleRange.all, :id, :name, {}, {class:"select-box", id:"publish_range"}) %>
+  </div>
+  <div>
+    投稿可能範囲：<%= f.collection_select(:topic_range, HPermissibleRange.all, :id, :name, {}, {class:"select-box", id:"topic_range"}) %>
+  </div>
+  <div>
+    コメント可能範囲：<%= f.collection_select(:comment_range, HPermissibleRange.all, :id, :name, {}, {class:"select-box", id:"comment_range"}) %>
+  </div> 
+  <div>
+    <%= f.submit "作成する" ,class:"regist-btn" %>
+  </div>
+<% end %>
+</div>
+<%= render "shared/footer" %>
