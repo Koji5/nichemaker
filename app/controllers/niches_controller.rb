@@ -1,5 +1,7 @@
 class NichesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_niche, only: [:show, :edit, :update, :destroy]
+
   def index
   end
 
@@ -18,8 +20,14 @@ class NichesController < ApplicationController
       render :new
     end
   end
-  
+
   def show
+  end
+
+  def update
+  end
+
+  def destroy
   end
 
   private
@@ -37,5 +45,9 @@ class NichesController < ApplicationController
       :topic_range,
       :comment_range
     ).merge(user_id: current_user.id)
+  end
+
+  def set_niche
+    @niche = Niche.find(params[:id])
   end
 end

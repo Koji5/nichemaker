@@ -9,7 +9,7 @@
       <% if @niches.present? %>
         <% @niches.each do |niche| %>
           <li>
-            <%= link_to niche_path(niche.id), method: :get do %>
+            <%= link_to niche_path(niche), method: :get do %>
             <div>
               <h3>
                 <%= niche.title %>
