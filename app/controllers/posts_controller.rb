@@ -4,6 +4,8 @@ class PostsController < ApplicationController
   end
 
   def new
+    @post = Post.new
+    @niche = Niche.find(params[:niche_id])
   end
 
   def show

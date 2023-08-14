@@ -1,3 +1,35 @@
 <%= render "shared/header" %>
-
+<div>
+  <%= @niche.title %>投稿ページ
+</div>
+<div>
+  <%= form_with model: @post, url: niche_posts_path(@niche), local: true do |f| %>
+    <div>
+      <div>投稿画像</div>
+      <div>
+        <div>
+          クリックしてファイルをアップロード
+        </div>
+        <div>
+          <%= f.file_field :image %>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>投稿文</div>
+      <div>
+        <%= f.text_area :content ,rows:"7" ,maxlength:"1000" %>
+      </div>
+    </div>
+    <div>
+      <div>投稿日</div>
+      <div>
+        <%= f.date_select :posted_at, include_blank: true %>
+      </div>
+    </div>
+    <div>
+      
+    </div>
+  <% end %>
+</div>
 <%= render "shared/footer" %>
