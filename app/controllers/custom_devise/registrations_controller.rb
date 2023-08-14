@@ -62,4 +62,8 @@ class CustomDevise::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+  private
+  def sign_up_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :nickname, :first_name, :first_name_kana, :last_name, :last_name_kana, :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :birth_date, :customer_token)
+  end
 end
