@@ -1,8 +1,10 @@
 class NichesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_niche, only: [:show, :edit, :update, :destroy]
+  before_action :move_to_index, only: [:edit, :update, :destroy]
 
   def index
+    @niches = Niche.order(created_at: :desc).limit(9)
   end
 
   def edit
@@ -25,6 +27,11 @@ class NichesController < ApplicationController
   end
 
   def update
+    if @niche.update(niche_parameters)
+      redirect_to niche_path(params[:id])
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -49,5 +56,11 @@ class NichesController < ApplicationController
 
   def set_niche
     @niche = Niche.find(params[:id])
+  end
+
+  def move_to_index
+    if current_user.id != @niche.user_id
+      redirect_to niche_path(@niche)
+    end
   end
 end
