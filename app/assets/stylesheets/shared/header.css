@@ -1,0 +1,9 @@
+* {
+  box-sizing: border-box;
+}
+
+.header {
+  width: 100vw;
+  padding: 2vh 15vw;
+  background-color: antiquewhite;
+}
