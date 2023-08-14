@@ -1,4 +1,5 @@
 class NichesController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   def index
   end
 
@@ -6,8 +7,35 @@ class NichesController < ApplicationController
   end
 
   def new
+    @niche = Niche.new
   end
 
+  def create
+    @niche = Niche.new(niche_parameters)
+    if @niche.save
+      redirect_to niche_path(@niche)
+    else
+      render :new
+    end
+  end
+  
   def show
+  end
+
+  private
+
+  def niche_parameters
+    params.require(:niche).permit(
+      :title,
+      :info,
+      :admin_name,
+      :progress_setting,
+      :parameter_setting,
+      :tag_setting,
+      :nice_setting,
+      :publish_range,
+      :topic_range,
+      :comment_range
+    ).merge(user_id: current_user.id)
   end
 end
