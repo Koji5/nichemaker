@@ -1,0 +1,31 @@
+<%= render "shared/header" %>
+<div>
+  <div>
+    <h2>ピックアップカテゴリー</h2>
+    <div>
+      新規作成ニッチ
+    </div>
+    <ul>
+      <% if @niches.present? %>
+        <% @niches.each do |niche| %>
+          <li>
+            <%= link_to niche_path(niche.id), method: :get do %>
+            <div>
+              <h3>
+                <%= niche.title %>
+              </h3>
+              <div>
+                <%= niche.info %>
+              </div>
+            </div>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div>
+  <%= link_to '作成する', new_niche_path %>
+</div>
+<%= render "shared/footer" %>
