@@ -1,0 +1,2 @@
+module NicheProgressGroupsHelper
+end

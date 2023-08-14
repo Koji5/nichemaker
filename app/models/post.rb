@@ -5,4 +5,5 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :niche
   has_one_attached :image
+  accepts_nested_attributes_for :post_parameters, :progress_rate
 end

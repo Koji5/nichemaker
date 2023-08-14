@@ -28,7 +28,18 @@
       </div>
     </div>
     <div>
-      
+      <div>進捗率</div>
+      <div>
+        <label for="niche_progress_group_select">グループ</label>
+        <%= f.collection_select(:niche_progress_group_id, @niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select"}) %>
+      </div>
+      <div>
+        <label for="niche_progress_task_select">タスク</label>
+        <select id="niche_progress_task_select">
+        <!-- Options will be populated dynamically based on selection -->
+        </select>
+        <%= f.hidden_field :niche_progress_task_id, id: "selected_niche_progress_task_id" %>
+      </div>
     </div>
   <% end %>
 </div>
