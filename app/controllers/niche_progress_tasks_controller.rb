@@ -37,9 +37,10 @@ class NicheProgressTasksController < ApplicationController
 
   def create_render(niche_id)
     niche_progress_groups = NicheProgressGroup.where(niche_id: niche_id).order(:name)
-    niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_groups.pluck(:id))
-    .joins(:niche_progress_group)
+    niche_progress_tasks = NicheProgressTask.joins(:niche_progress_group)
+    .select('niche_progress_tasks.*, niche_progress_groups.name AS group_name')
+    .where(niche_progress_group_id: niche_progress_groups.pluck(:id))
     .order('niche_progress_groups.name, niche_progress_tasks.name')
-    render json: niche_progress_tasks, include: :niche_progress_group
+    render json: niche_progress_tasks
   end
 end

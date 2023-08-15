@@ -152,19 +152,9 @@ function saveProgressGroup(){
     xhr.onload = function() {
       if (xhr.status === 200) {
         const responseData = JSON.parse(xhr.responseText);
-        const listItem = document.createElement('li');
-        listItem.dataset.id = responseData.id;
-        listItem.innerHTML = `
-          <input type="text" value="${progressGroupName}">
-          <button class="progress_group_edit">編集</button>
-          <button class="progress_group_delete">削除</button>
-        `;
-        requestAnimationFrame(() => {
-         progressGroupList.appendChild(listItem);
-          inputField.value = '';
-          alert("追加しました");
-          window.location.href = "/" + nicheId + "/edit";
-        });
+        reRenderProgressGroup(responseData.niche_progress_groups);
+        reRenderProgressTask(responseData.niche_progress_tasks);
+        inputField.value = '';
       } else if (xhr.status === 422) {
         const errors = JSON.parse(xhr.responseText);
         let errorMessage = "作成できませんでした。\n";
@@ -179,14 +169,14 @@ function saveProgressGroup(){
     xhr.send(data);
   });
 
+  // 編集・削除
   progressGroupList.addEventListener('click', (event) => {
-  // 編集
+    const listItem = event.target.closest('li');
+    const progressGroupId = listItem.getAttribute('data-id');
+    // 編集
     if (event.target.classList.contains('progress_group_edit')) {
-      const listItem = event.target.closest('li');
       const listInputField = listItem.querySelector('input');
       const newName = listInputField.value;
-      const progressGroupId = listItem.getAttribute('data-id');
-
       // ajax処理
       const xhr = new XMLHttpRequest();
       const url = '/niche_progress_groups/' + progressGroupId
@@ -199,8 +189,8 @@ function saveProgressGroup(){
       xhr.onload = function() {
         if (xhr.status === 200) {
           const responseData = JSON.parse(xhr.responseText);
-          alert(responseData.message);
-          window.location.href = "/" + nicheId + "/edit";
+          reRenderProgressGroup(responseData.niche_progress_groups);
+          reRenderProgressTask(responseData.niche_progress_tasks);
         } else if (xhr.status === 422) {
           const errors = JSON.parse(xhr.responseText);
           let errorMessage = "変更できませんでした。\n";
@@ -215,8 +205,6 @@ function saveProgressGroup(){
       xhr.send(data);
   // 削除
     } else if (event.target.classList.contains('progress_group_delete')) {
-      const listItem = event.target.closest('li');
-      const progressGroupId = listItem.getAttribute('data-id');
       // ajax処理
       const xhr = new XMLHttpRequest();
       const url = '/niche_progress_groups/' + progressGroupId
@@ -225,11 +213,8 @@ function saveProgressGroup(){
       xhr.onload = function() {
         if (xhr.status === 200) {
           const responseData = JSON.parse(xhr.responseText);
-          alert(responseData.message);
-          window.location.href = "/" + nicheId + "/edit";
-          //requestAnimationFrame(() => {
-          //  event.target.parentNode.remove();
-          //});
+          reRenderProgressGroup(responseData.niche_progress_groups);
+          reRenderProgressTask(responseData.niche_progress_tasks);
         } else if (xhr.status === 422) {
           const errors = JSON.parse(xhr.responseText);
           let errorMessage = "削除できませんでした。\n";
@@ -246,25 +231,49 @@ function saveProgressGroup(){
   });
 }
 
+// 進捗グループ変更時のレンダリング
+function reRenderProgressGroup(responseData) {
+  const progressGroutSelect = document.getElementById('niche_progress_group_id');
+  const progressGroupList = document.getElementById('progress_group_list');
+  while (progressGroutSelect.firstChild) {
+    progressGroutSelect.removeChild(progressGroutSelect.firstChild);
+  }
+  while (progressGroupList.firstChild) {
+    progressGroupList.removeChild(progressGroupList.firstChild);
+  }
+  responseData.forEach(function(group) {
+    const listItem = document.createElement('li'); // 新たに<li>要素を作成
+    listItem.dataset.id = group.id;
+    listItem.innerHTML = `
+      <input type="text" value="${group.name}">
+      <button class="progress_group_edit">編集</button>
+      <button class="progress_group_delete">削除</button>
+    `;
+    const selectItem = document.createElement('option');
+    selectItem.value = group.id;
+    selectItem.innerHTML = `${group.name}`;
+    // 要素に追加
+    progressGroupList.appendChild(listItem);
+    progressGroutSelect.appendChild(selectItem);
+  });
+}
+
+// 進捗タスク変更時のレンダリング
 function reRenderProgressTask(responseData) {
   const progressTaskList = document.getElementById('progress_task_list');
   while (progressTaskList.firstChild) {
     progressTaskList.removeChild(progressTaskList.firstChild);
   }
-
   responseData.forEach(function(task) {
     const listItem = document.createElement('li'); // 新たに<li>要素を作成
     listItem.dataset.id = task.id;
     listItem.innerHTML = `
-      ${task.niche_progress_group.name}
+      ${task.group_name}
       <input type="text" value="${task.name}">
       <button class="progress_task_edit">編集</button>
       <button class="progress_task_delete">削除</button>
     `;
-
-    requestAnimationFrame(() => {
-      progressTaskList.appendChild(listItem);
-    });
+    progressTaskList.appendChild(listItem);
   });
 }
 
