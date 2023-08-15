@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   get 'user_profile', to: 'custom_devise/registrations#show', as: :user_profile
-  resources :niche_progress_groups, only: [] do
+  resources :niche_progress_groups, only: [:create, :destroy, :update] do
     get 'fetch_niche_progress_tasks', on: :member
   end
 end

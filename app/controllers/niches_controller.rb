@@ -8,6 +8,7 @@ class NichesController < ApplicationController
   end
 
   def edit
+    @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:id]).order(:id)
   end
 
   def new

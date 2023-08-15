@@ -36,5 +36,19 @@
       <%= f.submit "編集する" %>
     </div>
   <% end %>
+  <div>
+    <div>進捗グループ</div>
+    <div><input type="text" id="progress_group_input"><button id="add_progress_group">追加する</button></div>
+    <ul id="progress_group_list">
+      <% @niche_progress_groups.each do |niche_progress_group| %>
+        <li data-id="<%= niche_progress_group.id %>">
+          <input type="text" value="<%= niche_progress_group.name %>">
+          <button class="progress_group_edit">編集</button>
+          <button class="progress_group_delete">削除</button>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
+<input type="hidden" id="niche_id" value="<%= @niche.id %>">
 <%= render "shared/footer" %>
