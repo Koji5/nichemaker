@@ -8,7 +8,15 @@ class NichesController < ApplicationController
   end
 
   def edit
-    @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:id]).order(:id)
+    @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:id]).order(:name)
+    
+    # ここで@niche_progress_tasksを取得し、niche_progress_group.nameをセットする
+    @niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: @niche_progress_groups.pluck(:id))
+      .joins(:niche_progress_group)
+      .order('niche_progress_groups.name, niche_progress_tasks.name')
+    @niche_progress_tasks.each do |task|
+      task.niche_progress_group_name = task.niche_progress_group.name
+    end
   end
 
   def new

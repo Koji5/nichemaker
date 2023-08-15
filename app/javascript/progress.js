@@ -9,18 +9,134 @@ function progressInit(){
   const progressInput = document.getElementById("progress_group_input");
   if (progressInput != null){
     saveProgressGroup();
+    saveProgressTask();
     return;
   }
 }
 
+// 進捗タスク
+function saveProgressTask(){
+  const addButton = document.getElementById('add_progress_task');
+  const inputField = document.getElementById('progress_task_input');
+  const selectField = document.getElementById('niche_progress_group_id');
+  const progressTaskList = document.getElementById('progress_task_list');
+
+  const nicheId = document.getElementById("niche_id").value;
+
+  // 新規作成
+  addButton.addEventListener('click', () => {
+    const progressTaskName = inputField.value;
+    const progressGroupId = selectField.value;
+    // ajax処理
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/niche_progress_tasks', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
+    const data = JSON.stringify({
+      niche_progress_task: {
+        name: progressTaskName,
+        niche_progress_group_id: progressGroupId,
+        niche_id: nicheId
+      }
+    });
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        const responseData = JSON.parse(xhr.responseText);
+          reRenderProgressTask(responseData);
+          inputField.value = '';
+      } else if (xhr.status === 422) {
+        const errors = JSON.parse(xhr.responseText);
+        let errorMessage = "作成できませんでした。\n";
+        for (const field in errors) {
+          errorMessage += `${field}: ${errors[field].join(", ")}\n`;
+        }
+        alert(errorMessage);
+      } else {
+        console.error('Error:', xhr.status, xhr.statusText);
+      }
+    };
+    xhr.send(data);
+  });
+
+  // 編集・削除ボタン
+  progressTaskList.addEventListener('click', (event) => {
+    const listItem = event.target.closest('li');
+    const progressTaskId = listItem.getAttribute('data-id');
+    // 編集
+    if (event.target.classList.contains('progress_task_edit')) {
+      const listInputField = listItem.querySelector('input');
+      const newName = listInputField.value;
+      // ajax処理
+      const xhr = new XMLHttpRequest();
+      const url = '/niche_progress_tasks/' + progressTaskId
+      xhr.open('PUT', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
+      const data = JSON.stringify({
+        niche_progress_task: {
+          name: newName,
+          niche_id: nicheId
+        }
+      });
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const responseData = JSON.parse(xhr.responseText);
+          reRenderProgressTask(responseData);
+        } else if (xhr.status === 422) {
+          const errors = JSON.parse(xhr.responseText);
+          let errorMessage = "編集できませんでした。\n";
+          for (const field in errors) {
+            errorMessage += `${field}: ${errors[field].join(", ")}\n`;
+          }
+          alert(errorMessage);
+        } else {
+          console.error('Error:', xhr.status, xhr.statusText);
+        }
+      };
+      xhr.send(data);
+  
+    // 削除
+    } else if (event.target.classList.contains('progress_task_delete')) {
+      // ajax処理
+      const xhr = new XMLHttpRequest();
+      const url = '/niche_progress_tasks/' + progressTaskId
+      xhr.open('DELETE', url, true);
+      xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
+      const data = JSON.stringify({
+        niche_progress_task: {
+          niche_id: nicheId
+        }
+      });
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const responseData = JSON.parse(xhr.responseText);
+          reRenderProgressTask(responseData);
+        } else if (xhr.status === 422) {
+          const errors = JSON.parse(xhr.responseText);
+          let errorMessage = "削除できませんでした。\n";
+          for (const field in errors) {
+            errorMessage += `${field}: ${errors[field].join(", ")}\n`;
+          }
+          alert(errorMessage);
+        } else {
+          console.error('Error:', xhr.status, xhr.statusText);
+        }
+      };
+      xhr.send(data);
+    }
+  });
+}
+
+// 進捗グループ
 function saveProgressGroup(){
   const addButton = document.getElementById('add_progress_group');
   const inputField = document.getElementById('progress_group_input');
   const progressGroupList = document.getElementById('progress_group_list');
+  const nicheId = document.getElementById("niche_id").value;
 
+  // 新規作成
   addButton.addEventListener('click', () => {
     const progressGroupName = inputField.value;
-    const nicheId = document.getElementById("niche_id").value;
 
     // ajax処理
     const xhr = new XMLHttpRequest();
@@ -46,6 +162,8 @@ function saveProgressGroup(){
         requestAnimationFrame(() => {
          progressGroupList.appendChild(listItem);
           inputField.value = '';
+          alert("追加しました");
+          window.location.href = "/" + nicheId + "/edit";
         });
       } else if (xhr.status === 422) {
         const errors = JSON.parse(xhr.responseText);
@@ -62,10 +180,11 @@ function saveProgressGroup(){
   });
 
   progressGroupList.addEventListener('click', (event) => {
+  // 編集
     if (event.target.classList.contains('progress_group_edit')) {
       const listItem = event.target.closest('li');
-      const inputField = listItem.querySelector('input');
-      const newName = inputField.value;
+      const listInputField = listItem.querySelector('input');
+      const newName = listInputField.value;
       const progressGroupId = listItem.getAttribute('data-id');
 
       // ajax処理
@@ -81,6 +200,7 @@ function saveProgressGroup(){
         if (xhr.status === 200) {
           const responseData = JSON.parse(xhr.responseText);
           alert(responseData.message);
+          window.location.href = "/" + nicheId + "/edit";
         } else if (xhr.status === 422) {
           const errors = JSON.parse(xhr.responseText);
           let errorMessage = "変更できませんでした。\n";
@@ -93,6 +213,7 @@ function saveProgressGroup(){
         }
       };
       xhr.send(data);
+  // 削除
     } else if (event.target.classList.contains('progress_group_delete')) {
       const listItem = event.target.closest('li');
       const progressGroupId = listItem.getAttribute('data-id');
@@ -105,9 +226,10 @@ function saveProgressGroup(){
         if (xhr.status === 200) {
           const responseData = JSON.parse(xhr.responseText);
           alert(responseData.message);
-          requestAnimationFrame(() => {
-            event.target.parentNode.remove();
-          });
+          window.location.href = "/" + nicheId + "/edit";
+          //requestAnimationFrame(() => {
+          //  event.target.parentNode.remove();
+          //});
         } else if (xhr.status === 422) {
           const errors = JSON.parse(xhr.responseText);
           let errorMessage = "削除できませんでした。\n";
@@ -124,11 +246,34 @@ function saveProgressGroup(){
   });
 }
 
+function reRenderProgressTask(responseData) {
+  const progressTaskList = document.getElementById('progress_task_list');
+  while (progressTaskList.firstChild) {
+    progressTaskList.removeChild(progressTaskList.firstChild);
+  }
+
+  responseData.forEach(function(task) {
+    const listItem = document.createElement('li'); // 新たに<li>要素を作成
+    listItem.dataset.id = task.id;
+    listItem.innerHTML = `
+      ${task.niche_progress_group.name}
+      <input type="text" value="${task.name}">
+      <button class="progress_task_edit">編集</button>
+      <button class="progress_task_delete">削除</button>
+    `;
+
+    requestAnimationFrame(() => {
+      progressTaskList.appendChild(listItem);
+    });
+  });
+}
+
 function getCSRFToken() {
   const tokenTag = document.querySelector('meta[name="csrf-token"]');
   return tokenTag ? tokenTag.content : '';
 }
 
+//記事投稿画面で使用
 function setProgress(){
   const progressSelect = document.getElementById("niche_progress_group_select");
   progressSelect.addEventListener('change', () => {

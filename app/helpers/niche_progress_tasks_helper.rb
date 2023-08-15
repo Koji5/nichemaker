@@ -1,0 +1,2 @@
+module NicheProgressTasksHelper
+end

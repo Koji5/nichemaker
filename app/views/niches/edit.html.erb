@@ -48,6 +48,21 @@
         </li>
       <% end %>
     </ul>
+    <div>進捗タスク</div>
+    <div>
+      <%= select_tag :niche_progress_group_id, options_from_collection_for_select(@niche_progress_groups, :id, :name) %>
+      <input type="text" id="progress_task_input"><button id="add_progress_task">追加する</button>
+    </div>
+    <ul id="progress_task_list">
+      <% @niche_progress_tasks.each do |niche_progress_task| %>
+        <li data-id="<%= niche_progress_task.id %>">
+          <%= niche_progress_task.niche_progress_group_name %>
+          <input type="text" value="<%= niche_progress_task.name %>">
+          <button class="progress_task_edit">編集</button>
+          <button class="progress_task_delete">削除</button>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </div>
 <input type="hidden" id="niche_id" value="<%= @niche.id %>">
