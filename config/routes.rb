@@ -14,5 +14,5 @@ Rails.application.routes.draw do
   end
   
   resources :niche_progress_tasks, only: [:create, :destroy, :update]
-
+  resources :niche_parameters, only: [:create, :destroy, :update]
 end

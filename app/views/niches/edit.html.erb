@@ -64,6 +64,25 @@
       <% end %>
     </ul>
   </div>
+  <div>
+    <div>パラメーター項目</div>
+    <div>項目名：単位</div>
+    <div>
+      <input type="text" id="parameter_name_input">
+      <input type="text" id="parameter_unit_input">
+      <button id="add_parameter">追加する</button>
+    </div>
+    <ul id="parameter_list">
+      <% @niche_parameters.each do |niche_parameter| %>
+        <li data-id="<%= niche_parameter.id %>">
+          <input type="text" value="<%= niche_parameter.name %>">
+          <input type="text" value="<%= niche_parameter.unit %>">
+          <button class="parameter_edit">編集</button>
+          <button class="parameter_delete">削除</button>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 <input type="hidden" id="niche_id" value="<%= @niche.id %>">
 <%= render "shared/footer" %>

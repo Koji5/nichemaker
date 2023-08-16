@@ -9,6 +9,7 @@ class NichesController < ApplicationController
 
   def edit
     @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:id]).order(:name)
+    @niche_parameters = NicheParameter.where(niche_id: params[:id]).order(:name)
     
     # ここで@niche_progress_tasksを取得し、niche_progress_group.nameをセットする
     @niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: @niche_progress_groups.pluck(:id))
