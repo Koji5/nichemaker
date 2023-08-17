@@ -56,7 +56,7 @@
     <ul id="progress_task_list">
       <% @niche_progress_tasks.each do |niche_progress_task| %>
         <li data-id="<%= niche_progress_task.id %>">
-          <%= niche_progress_task.niche_progress_group_name %>
+          <%= niche_progress_task.group_name %>
           <input type="text" value="<%= niche_progress_task.name %>">
           <button class="progress_task_edit">編集</button>
           <button class="progress_task_delete">削除</button>

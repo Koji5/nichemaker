@@ -20,8 +20,9 @@ function setParameter(){
     const parameterName = nameInputField.value;
     const parameterUnit = unitInputField.value;
     // ajax処理
+    const url = '/' + nicheId + '/niche_parameters';
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/niche_parameters', true);
+    xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
     const data = JSON.stringify({
@@ -52,26 +53,25 @@ function setParameter(){
       const newUnit = secondInputField.value;
       // ajax処理
       const xhr = new XMLHttpRequest();
-      const url = '/niche_parameters/' + parameterId
+      const url = '/' + nicheId + '/niche_parameters/' + parameterId;
       xhr.open('PUT', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
       const data = JSON.stringify({
         niche_parameter: {
           name: newName,
-          unit: newUnit,
-          niche_id: nicheId
+          unit: newUnit
         }
       });
       xhr.onload = function() {
         ajaxOnLoad(xhr);
       };
       xhr.send(data);
-    } else if (event.target.classList.contains('progress_group_delete')) {
+    } else if (event.target.classList.contains('parameter_delete')) {
       // 削除
       // ajax処理
       const xhr = new XMLHttpRequest();
-      const url = '/niche_parameters/' + progressGroupId
+      const url = '/' + nicheId + '/niche_parameters/' + parameterId;
       xhr.open('DELETE', url, true);
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
       xhr.onload = function() {

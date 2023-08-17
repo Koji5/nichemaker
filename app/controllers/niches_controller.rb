@@ -9,15 +9,11 @@ class NichesController < ApplicationController
 
   def edit
     @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:id]).order(:name)
+    @niche_progress_tasks = NicheProgressTask.joins(:niche_progress_group)
+    .select('niche_progress_tasks.*, niche_progress_groups.name AS group_name')
+    .where(niche_progress_group_id: @niche_progress_groups.pluck(:id))
+    .order('niche_progress_groups.name, niche_progress_tasks.name')
     @niche_parameters = NicheParameter.where(niche_id: params[:id]).order(:name)
-    
-    # ここで@niche_progress_tasksを取得し、niche_progress_group.nameをセットする
-    @niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: @niche_progress_groups.pluck(:id))
-      .joins(:niche_progress_group)
-      .order('niche_progress_groups.name, niche_progress_tasks.name')
-    @niche_progress_tasks.each do |task|
-      task.niche_progress_group_name = task.niche_progress_group.name
-    end
   end
 
   def new
@@ -50,18 +46,8 @@ class NichesController < ApplicationController
   private
 
   def niche_parameters
-    params.require(:niche).permit(
-      :title,
-      :info,
-      :admin_name,
-      :progress_setting,
-      :parameter_setting,
-      :tag_setting,
-      :nice_setting,
-      :publish_range,
-      :topic_range,
-      :comment_range
-    ).merge(user_id: current_user.id)
+    params.require(:niche).permit(:title, :info, :admin_name, :progress_setting, :parameter_setting, :tag_setting, :nice_setting, :publish_range, :topic_range, :comment_range)
+    .merge(user_id: current_user.id)
   end
 
   def set_niche

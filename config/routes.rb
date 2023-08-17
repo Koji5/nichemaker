@@ -7,12 +7,11 @@ Rails.application.routes.draw do
 
   resources :niches, path: '/', as: :niche do
     resources :posts
+    resources :niche_parameters, only: [:create, :destroy, :update]
+    resources :niche_progress_groups, only: [:create, :destroy, :update] do
+      get 'fetch_niche_progress_tasks', on: :member
+      resources :niche_progress_tasks, only: [:create, :destroy, :update]
+    end
   end
 
-  resources :niche_progress_groups, only: [:create, :destroy, :update] do
-    get 'fetch_niche_progress_tasks', on: :member
-  end
-  
-  resources :niche_progress_tasks, only: [:create, :destroy, :update]
-  resources :niche_parameters, only: [:create, :destroy, :update]
 end

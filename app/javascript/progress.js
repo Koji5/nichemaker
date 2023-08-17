@@ -20,23 +20,22 @@ function saveProgressTask(){
   const inputField = document.getElementById('progress_task_input');
   const selectField = document.getElementById('niche_progress_group_id');
   const progressTaskList = document.getElementById('progress_task_list');
-
+  const progressGroupId = selectField.value;
   const nicheId = document.getElementById("niche_id").value;
 
   // 新規作成
   addButton.addEventListener('click', () => {
     const progressTaskName = inputField.value;
-    const progressGroupId = selectField.value;
     // ajax処理
+    const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks';
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/niche_progress_tasks', true);
+    xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
     const data = JSON.stringify({
       niche_progress_task: {
         name: progressTaskName,
-        niche_progress_group_id: progressGroupId,
-        niche_id: nicheId
+        niche_progress_group_id: progressGroupId
       }
     });
     xhr.onload = function() {
@@ -68,14 +67,13 @@ function saveProgressTask(){
       const newName = listInputField.value;
       // ajax処理
       const xhr = new XMLHttpRequest();
-      const url = '/niche_progress_tasks/' + progressTaskId
+      const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks/' + progressTaskId;
       xhr.open('PUT', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
       const data = JSON.stringify({
         niche_progress_task: {
-          name: newName,
-          niche_id: nicheId
+          name: newName
         }
       });
       xhr.onload = function() {
@@ -99,14 +97,9 @@ function saveProgressTask(){
     } else if (event.target.classList.contains('progress_task_delete')) {
       // ajax処理
       const xhr = new XMLHttpRequest();
-      const url = '/niche_progress_tasks/' + progressTaskId
+      const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks/' + progressTaskId;
       xhr.open('DELETE', url, true);
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
-      const data = JSON.stringify({
-        niche_progress_task: {
-          niche_id: nicheId
-        }
-      });
       xhr.onload = function() {
         if (xhr.status === 200) {
           const responseData = JSON.parse(xhr.responseText);
@@ -122,7 +115,7 @@ function saveProgressTask(){
           console.error('Error:', xhr.status, xhr.statusText);
         }
       };
-      xhr.send(data);
+      xhr.send();
     }
   });
 }
@@ -139,8 +132,9 @@ function saveProgressGroup(){
     const progressGroupName = inputField.value;
 
     // ajax処理
+    const url = '/' + nicheId + '/niche_progress_groups';
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/niche_progress_groups', true);
+    xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
     const data = JSON.stringify({
@@ -178,8 +172,8 @@ function saveProgressGroup(){
       const listInputField = listItem.querySelector('input');
       const newName = listInputField.value;
       // ajax処理
+      const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId;
       const xhr = new XMLHttpRequest();
-      const url = '/niche_progress_groups/' + progressGroupId
       xhr.open('PUT', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
@@ -207,7 +201,7 @@ function saveProgressGroup(){
     } else if (event.target.classList.contains('progress_group_delete')) {
       // ajax処理
       const xhr = new XMLHttpRequest();
-      const url = '/niche_progress_groups/' + progressGroupId
+      const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId;
       xhr.open('DELETE', url, true);
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
       xhr.onload = function() {
