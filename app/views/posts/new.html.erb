@@ -3,15 +3,16 @@
   <%= @niche.title %>投稿ページ
 </div>
 <div>
-  <%= form_with model: @post, url: niche_posts_path(@niche), local: true do |f| %>
+  <%= form_with model: @post, url: niche_posts_path(@niche), id: 'new_post', local: true do |f| %>
     <div>
       <div>投稿画像</div>
       <div>
         <div>
           クリックしてファイルをアップロード
         </div>
+        <div id="previews"></div>
         <div>
-          <%= f.file_field :image %>
+          <%= f.file_field :images, name: 'post[images][]', data: {index: 0} %>
         </div>
       </div>
     </div>
@@ -32,15 +33,28 @@
       <div>
         <label for="niche_progress_group_select">グループ</label>
         <%= f.collection_select(:niche_progress_group_id, @niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select"}) %>
-      </div>
-      <div>
         <label for="niche_progress_task_select">タスク</label>
-        <select id="niche_progress_task_select">
-        <!-- Options will be populated dynamically based on selection -->
-        </select>
-        <%= f.hidden_field :niche_progress_task_id, id: "selected_niche_progress_task_id" %>
+        <%= f.collection_select(:niche_progress_task_id, @niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select"}) %>
+        <%= f.text_field :rate %>％
       </div>
     </div>
+    <% if @niche_parameters.present? %>
+    <div>
+      <div>パラメーター</div>
+      <% @niche_parameters.each_with_index do |niche_parameter, index| %>
+        <%= f.fields_for "post_parameters[#{index}]", @post_parameter do |post_parameter_fields| %>
+          <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
+          <%= niche_parameter.name %>
+          <%= post_parameter_fields.text_field :value %>
+          <%= niche_parameter.unit %>
+        <% end %>
+      <% end%>
+    </div>
+    <% end %>
+    <div>
+      <div><%= f.submit "作成する" %></div>
+    </div>
   <% end %>
+  <input type="hidden" id="niche_id" value="<%= @niche.id %>">
 </div>
 <%= render "shared/footer" %>

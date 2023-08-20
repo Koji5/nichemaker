@@ -19,6 +19,8 @@
           <li>
             <%= link_to niche_post_path(@niche, post), method: :get do %>
             <div>
+              <div>
+                <%= image_tag post.images[0] %>
               <h3>
                 <%= post.title %>
               </h3>
