@@ -20,11 +20,11 @@ function saveProgressTask(){
   const inputField = document.getElementById('progress_task_input');
   const selectField = document.getElementById('niche_progress_group_id');
   const progressTaskList = document.getElementById('progress_task_list');
-  const progressGroupId = selectField.value;
   const nicheId = document.getElementById("niche_id").value;
 
   // 新規作成
   addButton.addEventListener('click', () => {
+    const progressGroupId = selectField.value;
     const progressTaskName = inputField.value;
     // ajax処理
     const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks';
@@ -61,6 +61,7 @@ function saveProgressTask(){
   progressTaskList.addEventListener('click', (event) => {
     const listItem = event.target.closest('li');
     const progressTaskId = listItem.getAttribute('data-id');
+    const progressGroupId = selectField.value;
     // 編集
     if (event.target.classList.contains('progress_task_edit')) {
       const listInputField = listItem.querySelector('input');
