@@ -280,16 +280,15 @@ function getCSRFToken() {
 //記事投稿画面で使用
 function setProgress(){
   const progressSelect = document.getElementById("niche_progress_group_select");
+  const nicheId = document.getElementById("niche_id").value;
   progressSelect.addEventListener('change', () => {
     const selectedNicheProgressGroupId = progressSelect.value;
     // ajax処理
+    const url = '/' + nicheId + '/niche_progress_groups/' + selectedNicheProgressGroupId + '/fetch_niche_progress_tasks/';
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/fetch_niche_progress_tasks', true);
+    xhr.open('GET', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
-    const data = JSON.stringify({
-      niche_progress_group_id: selectedNicheProgressGroupId
-    });
     xhr.onload = function() {
       if (xhr.status === 200) {
         const taskSelect = document.getElementById("niche_progress_task_select");
@@ -306,14 +305,6 @@ function setProgress(){
         console.error('Error:', xhr.status, xhr.statusText);
       }
     };
-    xhr.send(data);
-  });
-
-  const selectElement = document.getElementById("niche_progress_task_select");
-  const hiddenField = document.getElementById("selected_niche_progress_task_id");
-  
-  selectElement.addEventListener("change", function() {
-    const selectedValue = selectElement.value;
-    hiddenField.value = selectedValue;
+    xhr.send();
   });
 };
