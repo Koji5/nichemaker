@@ -3,7 +3,11 @@
   <%= @niche.title %>投稿ページ
 </div>
 <div>
-  <%= form_with model: @post, url: niche_posts_path(@niche), id: 'new_post', local: true do |f| %>
+  <%= form_with url: niche_posts_path(@niche), id: 'new_post', local: true do |f| %>
+    <div>
+      <div>投稿タイトル</div>
+      <%= f.text_field :title %>
+    <div>
     <div>
       <div>投稿画像</div>
       <div>
@@ -11,8 +15,9 @@
           クリックしてファイルをアップロード
         </div>
         <div id="previews"></div>
-        <div>
-          <%= f.file_field :images, name: 'post[images][]', data: {index: 0} %>
+        <div class="click-upload">
+          <%#= f.file_field :images, name: 'post[images][]', data: {index: 0} %>
+          <%= f.file_field :images, name: 'images[]', data: {index: 0} %>
         </div>
       </div>
     </div>
@@ -41,12 +46,12 @@
     <% if @niche_parameters.present? %>
     <div>
       <div>パラメーター</div>
-      <% @niche_parameters.each_with_index do |niche_parameter, index| %>
-        <%= f.fields_for "post_parameters[#{index}]", @post_parameter do |post_parameter_fields| %>
+      <% @niche_parameters.each do |niche_parameter| %>
+        <%= f.fields_for "post_parameters[]", @post_parameter do |post_parameter_fields| %>
           <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
           <%= niche_parameter.name %>
           <%= post_parameter_fields.text_field :value %>
-          <%= niche_parameter.unit %>
+          <%= niche_parameter.unit %><br>
         <% end %>
       <% end%>
     </div>
