@@ -1,9 +1,10 @@
 <%= render "shared/header" %>
 <div>
-  <%= @niche.title %>投稿ページ
+  <%= @post_form.niche.title %>投稿ページ
 </div>
 <div>
-  <%= form_with url: niche_posts_path(@niche), id: 'new_post', local: true do |f| %>
+  <%= form_with model: @post_form, url: niche_posts_path(@post_form.niche), id: 'new_post', local: true do |f| %>
+    <%= render 'error_messages', model: @post_form %>
     <div>
       <div>投稿タイトル</div>
       <%= f.text_field :title %>
@@ -37,17 +38,17 @@
       <div>進捗率</div>
       <div>
         <label for="niche_progress_group_select">グループ</label>
-        <%= f.collection_select(:niche_progress_group_id, @niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select"}) %>
+        <%= f.collection_select(:niche_progress_group_id, @post_form.niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select"}) %>
         <label for="niche_progress_task_select">タスク</label>
-        <%= f.collection_select(:niche_progress_task_id, @niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select"}) %>
+        <%= f.collection_select(:niche_progress_task_id, @post_form.niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select"}) %>
         <%= f.text_field :rate %>％
       </div>
     </div>
-    <% if @niche_parameters.present? %>
+    <% if @post_form.niche_parameters.present? %>
     <div>
       <div>パラメーター</div>
-      <% @niche_parameters.each do |niche_parameter| %>
-        <%= f.fields_for "post_parameters[]", @post_parameter do |post_parameter_fields| %>
+      <% @post_form.niche_parameters.each do |niche_parameter| %>
+        <%= f.fields_for "post_parameters[]", @post_form.post_parameter do |post_parameter_fields| %>
           <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
           <%= niche_parameter.name %>
           <%= post_parameter_fields.text_field :value %>
@@ -59,7 +60,7 @@
     <div>
       <div><%= f.submit "作成する" %></div>
     </div>
+    <%= f.hidden_field :niche_id, value: @post_form.niche.id, id: 'niche_id' %>
   <% end %>
-  <input type="hidden" id="niche_id" value="<%= @niche.id %>">
 </div>
 <%= render "shared/footer" %>

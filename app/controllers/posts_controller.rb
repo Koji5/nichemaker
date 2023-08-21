@@ -1,24 +1,19 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :new]
 
   def edit
   end
 
   def new
-    @post = Post.new
-    @niche = Niche.find(params[:niche_id])
-    get_data
+    @post_form = PostForm.new(niche_id: params[:niche_id])
   end
 
   def create
-    binding.pry
-    @post = Post.new(post_params)
-    @niche = Niche.find(params[:niche_id])
-    if @post.save
-      save_post_parameters
-      save_progress_rates
-      redirect_to niche_post_path(@niche.id, @post)
+    @post_form = PostForm.new(post_form_params)
+    if @post_form.valid?
+      @post_form.save
+      redirect_to niche_post_path(@post_form.niche_id, @post_form.post_id)
     else
-      get_data
       render :new
     end
   end
@@ -28,38 +23,18 @@ class PostsController < ApplicationController
 
   private
 
-  def get_data
-    @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:niche_id]).order(:name)
-    @niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: @niche_progress_groups.first.id).order(:name)
-    @niche_parameters = NicheParameter.where(niche_id: params[:niche_id]).order(:name)
-    @post_parameter = PostParameter.new
-  end
-
-  def save_post_parameters
-    post_parameter_params = params[:post_parameters]
-    post_parameter_params.each do |post_parameter_param|
-      post_parameter = PostParameter.new(post_parameter_param.permit(:niche_parameter_id, :value))
-      post_parameter.post_id = @post.id
-      post_parameter.save
-    end
-  end
-
-  def save_progress_rates
-    progress_rate = ProgressRate.new(progress_rate_params)
-    progress_rate.save
-  end
-
-  def post_params
-    params.permit(
+  def post_form_params
+    params.require(:post_form).permit(
       :title,
       :content,
       :posted_at,
       :niche_id,
-      {images: []}
-    ).merge(user_id: current_user.id)
-  end
-
-  def progress_rate_params
-    params.permit(:rate, :niche_progress_task_id).merge(post_id: @post.id)
+      :niche_progress_group_id,
+      :niche_progress_task_id,
+      :rate,
+      :post_id,
+      :images,
+      post_parameters: [:niche_parameter_id, :value]
+      ).merge(user_id: current_user.id)
   end
 end
