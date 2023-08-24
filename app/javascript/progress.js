@@ -26,6 +26,9 @@ function saveProgressTask(){
   addButton.addEventListener('click', () => {
     const progressGroupId = selectField.value;
     const progressTaskName = inputField.value;
+    const startDate = document.getElementById('add_start_date').value;
+    const endDate = document.getElementById('add_end_date').value;
+
     // ajax処理
     const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks';
     const xhr = new XMLHttpRequest();
@@ -35,8 +38,10 @@ function saveProgressTask(){
     const data = JSON.stringify({
       niche_progress_task: {
         name: progressTaskName,
-        niche_progress_group_id: progressGroupId
-      }
+        niche_progress_group_id: progressGroupId,
+        start: startDate,
+        end: endDate
+    }
     });
     xhr.onload = function() {
       if (xhr.status === 200) {
@@ -59,13 +64,15 @@ function saveProgressTask(){
 
   // 編集・削除ボタン
   progressTaskList.addEventListener('click', (event) => {
-    const listItem = event.target.closest('li');
-    const progressTaskId = listItem.getAttribute('data-id');
-    const progressGroupId = selectField.value;
     // 編集
     if (event.target.classList.contains('progress_task_edit')) {
-      const listInputField = listItem.querySelector('input');
-      const newName = listInputField.value;
+      const listItem = event.target.closest('li');
+      const progressTaskId = listItem.getAttribute('data-id');
+      const progressGroupId = listItem.querySelector('.group-id').value;
+      const newName = listItem.querySelector('.task-name').value;
+      const startDate = listItem.querySelector('.edit_start_date').value;
+      const endDate = listItem.querySelector('.edit_end_date').value;
+
       // ajax処理
       const xhr = new XMLHttpRequest();
       const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks/' + progressTaskId;
@@ -74,7 +81,9 @@ function saveProgressTask(){
       xhr.setRequestHeader('X-CSRF-Token', getCSRFToken()); // 必要に応じてCSRFトークンを取得
       const data = JSON.stringify({
         niche_progress_task: {
-          name: newName
+          name: newName,
+          start: startDate,
+          end: endDate
         }
       });
       xhr.onload = function() {
@@ -96,7 +105,10 @@ function saveProgressTask(){
   
     // 削除
     } else if (event.target.classList.contains('progress_task_delete')) {
-      // ajax処理
+      const listItem = event.target.closest('li');
+      const progressTaskId = listItem.getAttribute('data-id');
+      const progressGroupId = listItem.querySelector('.group-id').value;
+        // ajax処理
       const xhr = new XMLHttpRequest();
       const url = '/' + nicheId + '/niche_progress_groups/' + progressGroupId + '/niche_progress_tasks/' + progressTaskId;
       xhr.open('DELETE', url, true);
@@ -263,10 +275,18 @@ function reRenderProgressTask(responseData) {
     const listItem = document.createElement('li'); // 新たに<li>要素を作成
     listItem.dataset.id = task.id;
     listItem.innerHTML = `
-      ${task.group_name}
-      <input type="text" value="${task.name}">
-      <button class="progress_task_edit">編集</button>
-      <button class="progress_task_delete">削除</button>
+    ${task.group_name}
+    <input type="hidden" class="group-id" value="${task.niche_progress_group_id}">
+    <input type="text" class="task-name" value="${task.name}">
+
+    <label>開始日
+    <input type="date" class="edit_start_date" value="${task.start.split('T')[0]}"></label>
+
+    <label>終了日
+    <input type="date" class="edit_end_date" value="${task.end.split('T')[0]}"></label>
+
+    <button class="progress_task_edit">編集</button>
+    <button class="progress_task_delete">削除</button>
     `;
     progressTaskList.appendChild(listItem);
   });

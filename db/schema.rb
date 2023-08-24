@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 2023_08_12_124704) do
 
   create_table "niche_progress_tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
+    t.date "start", null: false
+    t.date "end", null: false
     t.bigint "niche_progress_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -110,7 +112,7 @@ ActiveRecord::Schema.define(version: 2023_08_12_124704) do
   end
 
   create_table "progress_rates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.decimal "rate", precision: 5, scale: 2, null: false
+    t.float "rate", null: false
     t.bigint "niche_progress_task_id", null: false
     t.bigint "post_id", null: false
     t.datetime "created_at", precision: 6, null: false

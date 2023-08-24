@@ -8,11 +8,8 @@ class NichesController < ApplicationController
   end
 
   def edit
-    @niche_progress_groups = NicheProgressGroup.where(niche_id: params[:id]).order(:name)
-    @niche_progress_tasks = NicheProgressTask.joins(:niche_progress_group)
-    .select('niche_progress_tasks.*, niche_progress_groups.name AS group_name')
-    .where(niche_progress_group_id: @niche_progress_groups.pluck(:id))
-    .order('niche_progress_groups.name, niche_progress_tasks.name')
+    @niche_progress_groups = NicheProgressGroup.by_niche_id(params[:id])
+    @niche_progress_tasks = NicheProgressTask.by_group_ids(@niche_progress_groups.pluck(:id))
     @niche_parameters = NicheParameter.where(niche_id: params[:id]).order(:name)
   end
 

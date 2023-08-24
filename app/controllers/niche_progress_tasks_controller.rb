@@ -2,6 +2,10 @@ class NicheProgressTasksController < ApplicationController
 
   def create
     niche_progress_task = NicheProgressTask.new(niche_progress_task_params)
+    # 日付情報を追加
+    niche_progress_task.start = Date.parse(params[:niche_progress_task][:start])
+    niche_progress_task.end = Date.parse(params[:niche_progress_task][:end])
+
     if niche_progress_task.save
       create_render()
     else
@@ -11,7 +15,12 @@ class NicheProgressTasksController < ApplicationController
 
   def update
     niche_progress_task = NicheProgressTask.find(params[:id])
-    if niche_progress_task.update(niche_progress_task_params)
+    update_params = niche_progress_task_params.to_h
+    # 日付情報を追加
+    update_params[:start] = Date.parse(params[:niche_progress_task][:start])
+    update_params[:end] = Date.parse(params[:niche_progress_task][:end])
+
+    if niche_progress_task.update(update_params)
       create_render()
     else
       render json: niche_progress_task.errors, status: :unprocessable_entity
@@ -30,15 +39,14 @@ class NicheProgressTasksController < ApplicationController
   private
 
   def niche_progress_task_params
-    params.require(:niche_progress_task).permit(:name, :niche_progress_group_id)
+    params.require(:niche_progress_task).permit(:name, :niche_progress_group_id, :start, :end)
   end
 
-  def create_render()
-    niche_progress_groups = NicheProgressGroup.where(niche_id: params[:niche_id]).order(:name)
-    niche_progress_tasks = NicheProgressTask.joins(:niche_progress_group)
-    .select('niche_progress_tasks.*, niche_progress_groups.name AS group_name')
-    .where(niche_progress_group_id: niche_progress_groups.pluck(:id))
-    .order('niche_progress_groups.name, niche_progress_tasks.name')
+  def create_render
+    niche_progress_groups = NicheProgressGroup.by_niche_id(params[:niche_id])
+    niche_progress_tasks = NicheProgressTask.by_group_ids(niche_progress_groups.pluck(:id))
+  
     render json: niche_progress_tasks
   end
+
 end
