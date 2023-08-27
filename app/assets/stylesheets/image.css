@@ -5,6 +5,12 @@ img {
   object-fit: contain;
 }
 
+.post-image {
+  height: auto;
+  width: 1000px;
+  object-fit: contain;
+}
+
 .other-images {
   display: flex;
 }

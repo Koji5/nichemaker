@@ -27,6 +27,7 @@ class NichesController < ApplicationController
   end
 
   def show
+    @posts = Post.where(niche_id: params[:id]).order(:posted_at)
   end
 
   def update

@@ -31,7 +31,7 @@
     <div>
       <div>投稿日</div>
       <div>
-        <%= f.date_select :posted_at, include_blank: true %>
+        <%= f.date_field :posted_at, value: f.object.posted_at || Date.today %>
       </div>
     </div>
     <div>

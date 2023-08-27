@@ -1,3 +1,14 @@
 <%= render "shared/header" %>
-
+<%= form_with model: @post_form, url: niche_post_path(@post_form.niche), id: 'edit_post', local: true do |f| %>
+  <div>パラメーター</div>
+  <% @post_form.niche_parameters.each_with_index do |niche_parameter, index| %>
+    <%= f.fields_for "post_parameters[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
+      <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
+      <%= niche_parameter.name %>
+      <%= post_parameter_fields.text_field :value %>
+      <%= niche_parameter.unit %><br>
+    <% end %>
+  <% end %>
+  <div><%= f.submit "更新する" %></div>
+<% end %>
 <%= render "shared/footer" %>

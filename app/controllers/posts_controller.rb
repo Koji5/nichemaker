@@ -2,6 +2,8 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :new]
 
   def edit
+    post = Post.find(params[:id])
+    @post_form = PostForm.new({id: post.id, niche_id: post.niche_id})
   end
 
   def new
@@ -19,6 +21,8 @@ class PostsController < ApplicationController
   end
 
   def show
+    post = Post.find(params[:id])
+    @post_presenter = PostPresenter.new(post).to_h
   end
 
   private
@@ -33,8 +37,12 @@ class PostsController < ApplicationController
       :niche_progress_task_id,
       :rate,
       :post_id,
-      :images,
-      post_parameters: [:niche_parameter_id, :value]
-      ).merge(user_id: current_user.id)
+      post_parameters: [:niche_parameter_id, :value],
+      images: []
+      ).merge(user_id: current_user.id, images: params[:images])
+  end
+
+  def edit_post_form_params
+
   end
 end
