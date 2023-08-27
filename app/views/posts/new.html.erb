@@ -3,7 +3,7 @@
   <%= @post_form.niche.title %>投稿ページ
 </div>
 <div>
-  <%= form_with model: @post_form, url: niche_posts_path(@post_form.niche), id: 'new_post', local: true do |f| %>
+  <%= form_with model: @post_form, url: niche_posts_path(@post_form.niche), id: 'post-form', local: true, html: { enctype: "multipart/form-data" } do |f| %>
     <%= render 'error_messages', model: @post_form %>
     <div>
       <div>投稿タイトル</div>
@@ -11,16 +11,22 @@
     <div>
     <div>
       <div>投稿画像</div>
+      <div id="image-display-area"></div>
+      <button type="button" id="add-image-button">画像を追加</button>
+      <%= f.file_field :images, name: 'images[]', multiple: true, style: "display: none;" %>
+<!--
       <div>
         <div>
           クリックしてファイルをアップロード
         </div>
         <div id="previews"></div>
         <div class="click-upload">
-          <%#= f.file_field :images, name: 'post[images][]', data: {index: 0} %>
-          <%= f.file_field :images, name: 'images[]', data: {index: 0} %>
+-->
+          <%#= f.file_field :images, name: 'images[]', data: {index: 0} %>
+<!--
         </div>
       </div>
+-->
     </div>
     <div>
       <div>投稿文</div>

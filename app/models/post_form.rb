@@ -2,6 +2,7 @@ class PostForm
   include ActiveModel::Model
   
   attr_accessor(
+    :id,
     :title,
     :content,
     :posted_at,
@@ -18,6 +19,7 @@ class PostForm
     :niche_parameters,
     :post_parameter,
     :post_parameters_by_niche,
+    :deleted_image_ids,
     :images
   )
 
@@ -37,7 +39,6 @@ class PostForm
     else
       setup_for_new
     end
-    params.delete(:id)
     super(params)
   end
 
@@ -70,6 +71,25 @@ class PostForm
     end
   end
 
+  def update
+    post = Post.find(post_id)
+    ActiveRecord::Base.transaction do
+      post.update!(
+        title: title,
+        content: content,
+        posted_at: posted_at,
+        niche_id: niche_id
+      )
+      # 削除される画像を処理する
+      deleted_image_ids.each do |image_id|
+        image = ActiveStorage::Attachment.find(image_id)
+        image.purge if image.present?
+      end
+      # 追加される画像を処理する
+      post.images.attach(images) if images.present?
+    end
+  end
+
   private
   def post_parameter_params
     return [] unless post_parameters
@@ -77,19 +97,15 @@ class PostForm
   end
 
   def setup_for_new
-    self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_groups.first.id).order(:name)
+    self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_groups&.first.id)&.order(:name)
   end
 
   def setup_for_edit(params)
-    post = Post.find(params[:id])
-    self.title = post.title
-    self.content = post.content
-    self.posted_at = post.posted_at
-    self.user_id = post.user_id
     progress_rate = ProgressRate.where(post_id: params[:id]).first
     self.rate = progress_rate&.rate
     self.niche_progress_task_id = progress_rate&.niche_progress_task_id
-    self.niche_progress_group_id = NicheProgressTask.find(niche_progress_task_id).niche_progress_group_id
+    self.niche_progress_group_id = NicheProgressTask.find(niche_progress_task_id)&.niche_progress_group_id
+    self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_group_id).order(:name)
     self.post_parameters_by_niche = self.niche_parameters.map do |niche_parameter|
       PostParameter.find_by(niche_parameter_id: niche_parameter.id, post_id: params[:id]) || PostParameter.new(niche_parameter_id: niche_parameter.id)
     end

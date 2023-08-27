@@ -3,7 +3,7 @@ class PostsController < ApplicationController
 
   def edit
     post = Post.find(params[:id])
-    @post_form = PostForm.new({id: post.id, niche_id: post.niche_id})
+    @post_form = PostForm.new(edit_attributes(post).merge(images: post.images))
   end
 
   def new
@@ -25,7 +25,27 @@ class PostsController < ApplicationController
     @post_presenter = PostPresenter.new(post).to_h
   end
 
+  def update
+    @post_form = PostForm.new(post_form_params)
+    if @post_form.valid?
+      @post_form.update
+      redirect_to niche_post_path(@post_form.niche_id, @post_form.post_id)
+    else
+      render :edit
+    end
+  end
+
   private
+
+  def edit_attributes(post)
+    post.attributes.symbolize_keys.slice(
+      :id, 
+      :title, 
+      :content, 
+      :posted_at, 
+      :user_id
+    ).merge(niche_id: post.niche_id)
+  end
 
   def post_form_params
     params.require(:post_form).permit(
@@ -38,11 +58,9 @@ class PostsController < ApplicationController
       :rate,
       :post_id,
       post_parameters: [:niche_parameter_id, :value],
-      images: []
-      ).merge(user_id: current_user.id, images: params[:images])
+      images: [],
+      deleted_image_ids: []
+    ).merge(user_id: current_user.id, images: params[:images])
   end
 
-  def edit_post_form_params
-
-  end
 end

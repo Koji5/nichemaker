@@ -1,14 +1,62 @@
 <%= render "shared/header" %>
-<%= form_with model: @post_form, url: niche_post_path(@post_form.niche), id: 'edit_post', local: true do |f| %>
-  <div>パラメーター</div>
-  <% @post_form.niche_parameters.each_with_index do |niche_parameter, index| %>
-    <%= f.fields_for "post_parameters[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
-      <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
-      <%= niche_parameter.name %>
-      <%= post_parameter_fields.text_field :value %>
-      <%= niche_parameter.unit %><br>
+<% attached_images_data = @post_form.images.map { |image| { url: rails_blob_url(image), id: image.id, filename: image.filename.to_s } } %>
+<script>
+  var attachedImagesData = <%= raw attached_images_data.to_json %>;
+</script>
+<section>
+  <h1><%= @post_form.niche.title %> - <%= @post_form.title %> 編集ページ</h1>
+
+  <%= form_with model: @post_form, url: niche_post_path(@post_form.niche), id: 'post-form', local: true, html: { enctype: "multipart/form-data" } do |f| %>
+    <%= render 'error_messages', model: @post_form %>
+
+    <div class="field">
+      <label for="post_form_title">投稿タイトル</label>
+      <%= f.text_field :title %>
+    </div>
+
+    <div class="field">
+      <label>投稿画像</label>
+      <div id="image-display-area"></div>
+      <div id="deleted-images"></div>
+      <button type="button" id="add-image-button">画像を追加</button>
+      <%= f.file_field :images, name: 'images[]', multiple: true, style: "display: none;" %>
+    </div>
+
+    <div class="field">
+      <label for="post_form_content">投稿文</label>
+      <%= f.text_area :content, rows: "7", maxlength: "1000" %>
+    </div>
+
+    <div class="field">
+      <label for="post_form_posted_at">投稿日</label>
+      <%= f.date_field :posted_at, value: f.object.posted_at || Date.today %>
+    </div>
+
+    <div class="field">
+      <label>進捗率</label>
+      <%= f.collection_select(:niche_progress_group_id, @post_form.niche_progress_groups, :id, :name, {}, { id: "niche_progress_group_select" }) %>
+      <%= f.collection_select(:niche_progress_task_id, @post_form.niche_progress_tasks, :id, :name, {}, { id: "niche_progress_task_select" }) %>
+      <%= f.text_field :rate %>％
+    </div>
+
+    <% if @post_form.niche_parameters.present? %>
+      <div class="field">
+        <label>パラメーター</label>
+        <% @post_form.niche_parameters.each_with_index do |niche_parameter, index| %>
+          <%= f.fields_for "post_parameters[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
+            <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
+            <%= niche_parameter.name %>
+            <%= post_parameter_fields.text_field :value %>
+            <%= niche_parameter.unit %><br>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
+
+    <div class="actions">
+      <%= f.submit "更新する" %>
+    </div>
+    <%= f.hidden_field :niche_id, value: @post_form.niche.id, id: 'niche_id' %>
   <% end %>
-  <div><%= f.submit "更新する" %></div>
-<% end %>
+</section>
 <%= render "shared/footer" %>
