@@ -54,7 +54,7 @@
     <div>
       <div>パラメーター</div>
       <% @post_form.niche_parameters.each do |niche_parameter| %>
-        <%= f.fields_for "post_parameters[]", @post_form.post_parameter do |post_parameter_fields| %>
+        <%= f.fields_for "post_parameter_params[]", @post_form.post_parameter do |post_parameter_fields| %>
           <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
           <%= niche_parameter.name %>
           <%= post_parameter_fields.text_field :value %>

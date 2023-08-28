@@ -1,17 +1,12 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :new]
-
-  def edit
-    post = Post.find(params[:id])
-    @post_form = PostForm.new(edit_attributes(post).merge(images: post.images))
-  end
+  before_action :authenticate_user!, only: [:create, :new, :edit, :update]
 
   def new
-    @post_form = PostForm.new(niche_id: params[:niche_id])
+    @post_form = PostNewForm.new(niche_id: params[:niche_id], new: true)
   end
 
   def create
-    @post_form = PostForm.new(post_form_params)
+    @post_form = PostNewForm.new(post_new_form_params)
     if @post_form.valid?
       @post_form.save
       redirect_to niche_post_path(@post_form.niche_id, @post_form.post_id)
@@ -25,11 +20,16 @@ class PostsController < ApplicationController
     @post_presenter = PostPresenter.new(post).to_h
   end
 
+  def edit
+    post = Post.find(params[:id])
+    @post_form = PostEditForm.new(edit_attributes(post))
+  end
+
   def update
-    @post_form = PostForm.new(post_form_params)
+    @post_form = PostEditForm.new(post_edit_form_params)
     if @post_form.valid?
-      @post_form.update
-      redirect_to niche_post_path(@post_form.niche_id, @post_form.post_id)
+      @post_form.save
+      redirect_to niche_post_path(@post_form.niche_id, @post_form.id)
     else
       render :edit
     end
@@ -43,12 +43,13 @@ class PostsController < ApplicationController
       :title, 
       :content, 
       :posted_at, 
-      :user_id
-    ).merge(niche_id: post.niche_id)
+      :user_id,
+      :niche_id
+    ).merge(images: post.images, edit: 'edit')
   end
 
-  def post_form_params
-    params.require(:post_form).permit(
+  def post_new_form_params
+    params.require(:post_new_form).permit(
       :title,
       :content,
       :posted_at,
@@ -56,11 +57,27 @@ class PostsController < ApplicationController
       :niche_progress_group_id,
       :niche_progress_task_id,
       :rate,
-      :post_id,
-      post_parameters: [:niche_parameter_id, :value],
-      images: [],
-      deleted_image_ids: []
+      post_parameter_params: [:niche_parameter_id, :value]#,
+#      images: []
     ).merge(user_id: current_user.id, images: params[:images])
   end
 
+  def post_edit_form_params
+    params.require(:post_edit_form).permit(
+      :niche_id,
+      :title,
+      :content,
+      :posted_at,
+#      :niche_progress_group_id,
+      :niche_progress_task_id,
+      :rate,
+      post_parameter_params: [:niche_parameter_id, :value],
+#      images: [],
+      deleted_image_ids: []
+    ).merge(
+      user_id: current_user.id, 
+      images: params[:images],
+      id: params[:id]
+    )
+  end
 end

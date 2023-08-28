@@ -4,9 +4,9 @@
   var attachedImagesData = <%= raw attached_images_data.to_json %>;
 </script>
 <section>
-  <h1><%= @post_form.niche.title %> - <%= @post_form.title %> 編集ページ</h1>
+  <h1><%= @post_form.niche_title %> - 投稿編集ページ</h1>
 
-  <%= form_with model: @post_form, url: niche_post_path(@post_form.niche), id: 'post-form', local: true, html: { enctype: "multipart/form-data" } do |f| %>
+  <%= form_with model: @post_form, url: niche_post_path(niche_id: @post_form.niche_id, id: @post_form.id), method: :patch, id: 'post-form', local: true, html: { enctype: "multipart/form-data" } do |f| %>
     <%= render 'error_messages', model: @post_form %>
 
     <div class="field">
@@ -43,7 +43,7 @@
       <div class="field">
         <label>パラメーター</label>
         <% @post_form.niche_parameters.each_with_index do |niche_parameter, index| %>
-          <%= f.fields_for "post_parameters[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
+          <%= f.fields_for "post_parameter_params[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
             <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
             <%= niche_parameter.name %>
             <%= post_parameter_fields.text_field :value %>
@@ -56,7 +56,7 @@
     <div class="actions">
       <%= f.submit "更新する" %>
     </div>
-    <%= f.hidden_field :niche_id, value: @post_form.niche.id, id: 'niche_id' %>
+    <%= f.hidden_field :niche_id, value: @post_form.niche_id, id: 'niche_id' %>
   <% end %>
 </section>
 <%= render "shared/footer" %>

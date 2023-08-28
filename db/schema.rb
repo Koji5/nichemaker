@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_12_124704) do
+ActiveRecord::Schema.define(version: 2023_08_28_112731) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 2023_08_12_124704) do
   end
 
   create_table "progress_rates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.float "rate", null: false
+    t.float "rate"
     t.bigint "niche_progress_task_id", null: false
     t.bigint "post_id", null: false
     t.datetime "created_at", precision: 6, null: false
