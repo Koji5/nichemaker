@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'user_profile', to: 'custom_devise/registrations#show', as: :user_profile
 
   resources :niches, path: '/', as: :niche do
+    resources :gantts, only: [:index]
     resources :posts
     resources :niche_parameters, only: [:create, :destroy, :update]
     resources :niche_progress_groups, only: [:create, :destroy, :update] do

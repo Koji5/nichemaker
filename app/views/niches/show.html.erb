@@ -38,8 +38,13 @@
     </ul>
   </div>
   <div>
-  <%= link_to '編集', edit_niche_path(@niche) %>
+    <%= link_to '編集', edit_niche_path(@niche) %>
   </div>
+  <div>
+    <%= link_to 'ガントチャート', niche_gantts_path(@niche) %>
+  </div>
+
+
 </div>
 <%= link_to(new_niche_post_path(@niche), class: 'purchase-btn') do %>
   <span class='purchase-btn-text'>投稿する</span>
