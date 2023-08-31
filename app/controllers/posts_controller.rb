@@ -58,7 +58,6 @@ class PostsController < ApplicationController
       :niche_progress_task_id,
       :rate,
       post_parameter_params: [:niche_parameter_id, :value]#,
-#      images: []
     ).merge(user_id: current_user.id, images: params[:images])
   end
 
@@ -68,11 +67,9 @@ class PostsController < ApplicationController
       :title,
       :content,
       :posted_at,
-#      :niche_progress_group_id,
       :niche_progress_task_id,
       :rate,
       post_parameter_params: [:niche_parameter_id, :value],
-#      images: [],
       deleted_image_ids: []
     ).merge(
       user_id: current_user.id, 

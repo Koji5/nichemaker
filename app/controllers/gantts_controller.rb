@@ -1,5 +1,5 @@
 class GanttsController < ApplicationController
   def index
-    # 必要な処理をここに記述
+    @gantts = GanttPresenter.new(params[:niche_id]).gantts_to_hashes
   end
 end

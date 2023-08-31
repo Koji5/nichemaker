@@ -1,6 +1,17 @@
 <%= javascript_pack_tag 'view_gantt' %>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function() {
+    initializeTasks(<%= @gantts.to_json.html_safe %>);
+  });
+</script>
+<%#= javascript_pack_tag 'view_chart' %>
 <%= render "shared/header" %>
+<!--
 <div>
-  <svg id="gantt"></svg>
-<div>
-
+  <canvas id="myChart"></canvas>
+</div>
+-->
+<div class="container">
+    <svg id="gantt"></svg>
+</div>
+<%= render "shared/footer" %>
