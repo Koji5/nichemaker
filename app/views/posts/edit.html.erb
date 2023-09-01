@@ -1,4 +1,4 @@
-<%= render "shared/header" %>
+<%= render "shared/header2" %>
 <% attached_images_data = @post_form.images.map { |image| { url: rails_blob_url(image), id: image.id, filename: image.filename.to_s } } %>
 <script>
   var attachedImagesData = <%= raw attached_images_data.to_json %>;

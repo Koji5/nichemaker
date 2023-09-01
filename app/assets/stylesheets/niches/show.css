@@ -32,3 +32,14 @@
 .purchase-btn-icon {
   width: 60%;
 }
+
+.uii{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction:column;
+}
+
+.lii{
+  background: #3ccace;
+}

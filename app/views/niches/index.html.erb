@@ -1,14 +1,14 @@
 <%= render "shared/header" %>
 <div>
-  <div>
+  <div class="main">
     <h2>ピックアップカテゴリー</h2>
     <div>
-      新規作成ニッチ
+      新着ニッチ
     </div>
-    <ul>
+    <ul class="new_niche">
       <% if @niches.present? %>
         <% @niches.each do |niche| %>
-          <li>
+          <li class="my_niche">
             <%= link_to niche_path(niche), method: :get do %>
             <div>
               <h3>
@@ -26,6 +26,6 @@
   </div>
 </div>
 <div>
-  <%= link_to '作成する', new_niche_path %>
+  <%= link_to '新規作成', new_niche_path %>
 </div>
 <%= render "shared/footer" %>

@@ -1,22 +1,17 @@
-<%= render "shared/header" %>
-<div>
-  <%= @niche.title %>
-</div>
-<div class="search">
-検索エリア
-</div>
+<%= render "shared/header2" %>
+
 <div class="tab">
-タブエリア
+新着　<%= link_to 'ガントチャート', niche_gantts_path(@niche) %>　<%= link_to 'グラフ', niche_graphs_path(@niche) %>
 </div>
 <div class="timeline">
   <div>
     タイムライン表示エリア
   </div>
   <div>
-    <ul>
+    <ul class="uii">
       <% if @posts.present? %>
         <% @posts.each do |post| %>
-          <li>
+          <li class="lii">
             <%= link_to niche_post_path(@niche, post), method: :get do %>
             <div>
               <div>
@@ -40,10 +35,6 @@
   <div>
     <%= link_to '編集', edit_niche_path(@niche) %>
   </div>
-  <div>
-    <%= link_to 'ガントチャート', niche_gantts_path(@niche) %>
-  </div>
-
 
 </div>
 <%= link_to(new_niche_post_path(@niche), class: 'purchase-btn') do %>

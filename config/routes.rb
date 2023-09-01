@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   resources :niches, path: '/', as: :niche do
     resources :gantts, only: [:index]
+    resources :graphs, only: [:index]
     resources :posts
     resources :niche_parameters, only: [:create, :destroy, :update]
     resources :niche_progress_groups, only: [:create, :destroy, :update] do

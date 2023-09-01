@@ -1,5 +1,5 @@
 <header class="header">
-  <h1>MyNiche</h1>
+  <h1><%= link_to "#{@niche.title}", niche_path(@niche), method: :get %></h1>
   <div>
     <ul>
       <% if user_signed_in? %>

@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :new, :edit, :update]
 
   def new
+    @niche = Niche.find(params[:niche_id])
     @post_form = PostNewForm.new(niche_id: params[:niche_id], new: true)
   end
 
@@ -17,6 +18,7 @@ class PostsController < ApplicationController
 
   def show
     post = Post.find(params[:id])
+    @niche = Niche.find(params[:niche_id])
     @post_presenter = PostPresenter.new(post).to_h
   end
 
