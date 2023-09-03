@@ -1,44 +1,40 @@
 <%= render "shared/header2" %>
-
 <div class="tab">
-新着　<%= link_to 'ガントチャート', niche_gantts_path(@niche) %>　<%= link_to 'グラフ', niche_graphs_path(@niche) %>
+  <span class="active-tab">新着</span>
+  <%= link_to 'ガントチャート', niche_gantts_path(@niche) %>
+  <%= link_to 'グラフ', niche_graphs_path(@niche) %>
 </div>
-<div class="timeline">
-  <div>
-    タイムライン表示エリア
-  </div>
-  <div>
-    <ul class="uii">
+<div class="content-wrapper-tab">
+  <div class="niche-container">
+    <ul class="post-list">
       <% if @posts.present? %>
         <% @posts.each do |post| %>
-          <li class="lii">
+          <li class="post-item">
             <%= link_to niche_post_path(@niche, post), method: :get do %>
-            <div>
-              <div>
+              <div class="post-image">
                 <% if post.images.attached? %>
                   <%= image_tag post.images.first %>
                 <% end %>
               </div>
-              <h3>
+              <h3 class="post-title">
                 <%= post.title %>
               </h3>
-              <div>
+              <div class="post-content">
                 <%= post.content %>
               </div>
-            </div>
             <% end %>
           </li>
         <% end %>
       <% end %>
     </ul>
   </div>
-  <div>
-    <%= link_to '編集', edit_niche_path(@niche) %>
-  </div>
 
+  <div class="edit-button">
+    <%= link_to "#{@niche.title}の詳細設定", edit_niche_path(@niche), class: 'create-btn' %>
+  </div>
+  <div class="create-btn-container">
+    <%= link_to '投稿する', new_niche_post_path(@niche), class: 'create-btn' %>
+  </div>
 </div>
-<%= link_to(new_niche_post_path(@niche), class: 'purchase-btn') do %>
-  <span class='purchase-btn-text'>投稿する</span>
-  <%= image_tag 'icon_camera.png' , size: '185x50' ,class: "purchase-btn-icon" %>
-<% end %>
+
 <%= render "shared/footer" %>

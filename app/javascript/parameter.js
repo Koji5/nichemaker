@@ -90,9 +90,10 @@ function reRenderParameter(responseData){
   responseData.forEach(function(parameter) {
     const listItem = document.createElement('li'); // 新たに<li>要素を作成
     listItem.dataset.id = parameter.id;
+    listItem.classList.add("list-item");
     listItem.innerHTML = `
-      <input type="text" value="${parameter.name}">
-      <input type="text" value="${parameter.unit}">
+      <label>項目名</label><input type="text" value="${parameter.name}">
+      <label>単位</label><input type="text" value="${parameter.unit}">
       <button class="parameter_edit">編集</button>
       <button class="parameter_delete">削除</button>
     `;

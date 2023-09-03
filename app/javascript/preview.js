@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
+  if (document.getElementById("add-image-button") == null){
+    return;
+  }
   const fileField = document.querySelector('input[type="file"]');
   const imageDisplayArea = document.getElementById('image-display-area');
   const addButton = document.getElementById('add-image-button');
@@ -16,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
       const deleteButton = document.createElement('button');
       deleteButton.textContent = "削除";
+      deleteButton.classList.add("delete-button");
+
       deleteButton.onclick = () => {
           imageDisplayArea.removeChild(container);
           if (imageId) {
@@ -26,10 +31,13 @@ document.addEventListener("DOMContentLoaded", function() {
               deletedImages.appendChild(input);
           }
       };
+      let imageWrapper = document.createElement("div");
+      imageWrapper.className = "image-wrapper";
 
-      container.appendChild(previewImage);
-      container.appendChild(fileNameDisplay);
-      container.appendChild(deleteButton);
+      imageWrapper.appendChild(previewImage);
+      imageWrapper.appendChild(fileNameDisplay);
+      imageWrapper.appendChild(deleteButton);
+      container.appendChild(imageWrapper);
       imageDisplayArea.appendChild(container);
   };
 

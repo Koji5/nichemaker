@@ -1,3 +1,276 @@
-// Place all the styles related to the Posts controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+  }
+
+  .image-display {
+    width: 100%;
+    border: 1px dashed $primary-color;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    img {
+      height: 100px;
+      width: 100px;
+      /* 縦横比を保ったまま、画像を縦横100pxのサイズに収めるプロパティです */
+      object-fit: contain;
+    }
+  }
+
+  .btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: $link-color;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: darken($link-color, 10%);
+    }
+  }
+
+  .submit-btn {
+    text-align: center;
+  }
+}
+
+
+.content-wrapper {
+  padding: 20px;
+}
+
+.post-title {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.post-images {
+  margin-bottom: 15px;
+
+  .post-image {
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 10px;
+  }
+}
+
+.post-content {
+  margin-bottom: 20px;
+
+  .post-details, .post-progress {
+    color: #777;
+    font-size: 0.9em;
+  }
+}
+
+.post-parameters {
+  margin-bottom: 20px;
+  font-size: 0.9em;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .parameter-item {
+    color: #777;
+    margin-bottom: 5px;
+    list-style-type: none;
+  }
+}
+
+.post-actions {
+  .btn {
+    padding: 10px 15px;
+    border: none;
+    position: fixed;  // 常時表示
+    right: 40px;
+    bottom: 40px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+
+    &.btn-edit {
+      background-color: #ffc107;
+    }
+
+    &:hover {
+      background-color: darken($bg-color, 10%);
+    }
+  }
+}
+.post-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .post-images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .post-image-container {
+      width: 100%;
+      display: flex; // 追加: 画像を水平方向の中央に配置するための設定
+      justify-content: center; // 追加: 画像を水平方向の中央に配置
+      .post-image {
+        width: 100%;
+        height: auto;
+        max-width: 100%; 
+      }
+    }
+  }
+
+  .post-content-box {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: lighten($bg-color, 7%);
+  }
+}
+.post-section {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+}
+
+.post-title {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.post-field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.post-input, .post-textarea, .post-select, .rate-input, .parameter-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.post-textarea {
+  resize: vertical;
+}
+
+.image-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  img {
+    height: 100px;
+    width: 100px;
+    /* 縦横比を保ったまま、画像を縦横100pxのサイズに収めるプロパティです */
+    object-fit: contain;
+  }
+}
+
+.image-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.image-button:hover {
+  background-color: #0056b3;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.post-submit-button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.post-submit-button:hover {
+  background-color: #218838;
+}
+
+.delete-button {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+.image-wrapper {
+  display: flex; // 横に並べる
+  align-items: center; // 中央揃え
+  margin-bottom: 15px; // 画像ごとの間隔を設定
+
+  img {
+    width: 80px; // サンプルとして80pxに設定
+    height: 80px; // サンプルとして80pxに設定
+    object-fit: cover;
+    margin-right: 10px; // 画像とファイル名の間隔を設定
+  }
+
+  span {
+    flex-grow: 1; // ファイル名を可能な限り広げる
+    margin-right: 10px; // ファイル名と削除ボタンの間隔を設定
+  }
+
+  .delete-button {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #c82333;
+    }
+  }
+}

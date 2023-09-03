@@ -1,3 +1,306 @@
-// Place all the styles related to the Niches controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.sub-section {
+  margin-top: 30px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.sub-title, .category-subtitle {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.form-border {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+.input-group, .list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  select, input, label, button {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+
+  input[type="text"], input[type="date"] {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #45a049;
+    }
+
+  }
+  .progress_group_delete, .progress_task_delete, .parameter_delete{
+    background-color: #dc3545;
+  }
+  #add_parameter, #add_progress_task, #add_progress_group{
+    background-color: $link-color;
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+
+    & > input[type="date"] {
+      margin-left: 5px;
+    }
+  }
+}
+
+.list-item {
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.input-group {
+  flex-wrap: wrap;
+}
+/* タブのスタイリング */
+.tab {
+  position: fixed;      // タブを固定位置に
+  top: 75px;            // この値はヘッダーの高さ＋少しの余白に応じて調整
+  width: 100%;          // 画面全体の幅にする
+  background-color: $bg-color;  // 背景色を設定して、下のコンテンツが透けて見えないように
+  z-index: 1000;        // 他の要素より前面に
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom: 1px solid $primary-color;
+  padding: 5px;
+
+  span, a {
+    margin-right: 20px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: $primary-color;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: darken($bg-color, 5%);
+    }
+  }
+
+  .active-tab {
+    background-color: $link-color;
+    color: white;
+  }
+}
+
+.content-wrapper-tab {
+  margin-top: 120px;  // ヘッダーの高さに合わせて調整。実際の値は調整が必要。
+  margin-bottom: 35px;  // フッターの高さに合わせて調整。実際の値は調整が必要。
+  overflow-y: auto;  // 縦方向にスクロール
+  height: calc(100vh - 120px - 35px);  // 100%からヘッダーとフッターの高さを引いた値。実際の値は調整が必要。
+  position: relative;
+  z-index: 1;
+}
+
+/* 投稿のスタイリング */
+.post-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.post-item {
+  border-radius: 5px;  // 角を少し丸める
+  background-color: lighten($bg-color, 7%); // カードの背景色を微妙に明るく
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);  // カードに影を追加
+  width: calc(33.33% - 20px);
+  margin: 10px;
+  border: 1px solid $primary-color;
+  padding: 15px;
+  box-sizing: border-box;
+  transition: box-shadow .3s, transform .3s; // ホバーエフェクト用
+
+  &:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transform: translateY(-5px);  // ホバー時にカードを上に少し持ち上げ
+  }
+  .post-image img {
+    height: 150px;  // 一定の高さを持たせる
+    overflow: hidden;  // はみ出した画像部分を非表示に
+    margin-bottom: 10px;
+    img {
+      max-width: 100%;
+      vertical-align: bottom; // 余白の削除
+    }
+  }
+
+  .post-title {
+    font-size: 18px;
+    margin: 10px 0;
+    font-weight: bold;  // タイトルを太字に
+    text-align: center;  // 中央揃え
+  }
+  .post-content {
+    padding-bottom: 10px;  // コンテンツの下部に余白を追加
+  }
+}
+
+/* 編集ボタンのスタイリング */
+.edit-button {
+  .create-btn {
+    display: block;
+    position: fixed;  // 常時表示
+    right: 180px;
+    bottom: 40px;
+    background-color: $link-color;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 30px;  // 丸みを帯びたボタン
+    font-size: 18px;
+    transition: background-color .3s;
+
+    &:hover {
+      background-color: darken($link-color, 10%);
+      text-decoration: none;
+    }
+  }
+}
+
+// ニッチコンテナのスタイル
+.niche-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px ;
+}
+
+.category-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.niche-label {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+/* ニッチボックスのスタイル */
+.new_niche {
+  list-style-type: none;  // ・を消す
+  padding: 0;
+  display: flex;  // Flexboxを使う
+  flex-wrap: wrap;  // 折り返しを有効にする
+
+  .my_niche {
+    flex-basis: calc(33.33% - 20px);  // 3列で表示させるための基本サイズ。間隔を考慮
+    border: 1px solid $primary-color;
+    margin: 10px;
+    padding: 15px;
+    box-sizing: border-box;  // ボーダーを含むサイズに
+    .niche-title {
+      font-size: 18px;
+      margin: 0;
+    }
+    .niche-info {
+      margin-top: 10px;
+    }
+    &:hover {
+      transform: translateY(-5px);  // ホバー時に少し浮かせる
+    }
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+    }
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+/* 新規作成ボタンのスタイル */
+.create-btn-container  {
+  .create-btn {
+    display: block;
+    position: fixed;  // 常時表示
+    right: 40px;
+    bottom: 40px;
+    background-color: $link-color;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 30px;  // 丸みを帯びたボタン
+    font-size: 18px;
+    transition: background-color .3s;
+
+    &:hover {
+      background-color: darken($link-color, 10%);
+      text-decoration: none;
+    }
+  }
+}
+
+/* niches/new.scss */
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+
+  select.form-control {
+    padding-right: 30px; // selectボックスのデフォルトのアイコンのスペースを確保
+  }
+}
+
+.create-btn {
+  background-color: $link-color;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: darken($link-color, 10%);
+  }
+}
+
+.niche-edit-btn {
+  background-color: $edit-color;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: darken($edit-color, 10%);
+  }
+}

@@ -12,6 +12,7 @@ class PostsController < ApplicationController
       @post_form.save
       redirect_to niche_post_path(@post_form.niche_id, @post_form.post_id)
     else
+      @niche = Niche.find(params[:niche_id])
       render :new
     end
   end
@@ -24,6 +25,7 @@ class PostsController < ApplicationController
 
   def edit
     post = Post.find(params[:id])
+    @niche = Niche.find(params[:niche_id])
     @post_form = PostEditForm.new(edit_attributes(post))
   end
 
@@ -55,12 +57,11 @@ class PostsController < ApplicationController
       :title,
       :content,
       :posted_at,
-      :niche_id,
       :niche_progress_group_id,
       :niche_progress_task_id,
       :rate,
-      post_parameter_params: [:niche_parameter_id, :value]#,
-    ).merge(user_id: current_user.id, images: params[:images])
+      post_parameter_params: [:niche_parameter_id, :value]
+    ).merge(user_id: current_user.id, images: params[:images], niche_id: params[:niche_id])
   end
 
   def post_edit_form_params

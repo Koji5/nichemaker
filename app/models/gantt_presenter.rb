@@ -1,8 +1,7 @@
 class GanttPresenter
 
   def initialize(niche_id)
-
-    @gantts = NicheProgressTask.joins(:niche_progress_group, :progress_rates)
+    @gantts = NicheProgressTask.joins(:niche_progress_group).left_joins(:progress_rates)
     .joins(
       "LEFT JOIN (
         SELECT niche_progress_group_id, MIN(start) as earliest_start

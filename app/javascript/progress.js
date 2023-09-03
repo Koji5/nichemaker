@@ -251,6 +251,7 @@ function reRenderProgressGroup(responseData) {
   responseData.forEach(function(group) {
     const listItem = document.createElement('li'); // 新たに<li>要素を作成
     listItem.dataset.id = group.id;
+    listItem.classList.add("list-item");
     listItem.innerHTML = `
       <input type="text" value="${group.name}">
       <button class="progress_group_edit">編集</button>
@@ -274,17 +275,13 @@ function reRenderProgressTask(responseData) {
   responseData.forEach(function(task) {
     const listItem = document.createElement('li'); // 新たに<li>要素を作成
     listItem.dataset.id = task.id;
+    listItem.classList.add("list-item");
     listItem.innerHTML = `
-    ${task.group_name}
+    <label>${task.group_name}</label>
     <input type="hidden" class="group-id" value="${task.niche_progress_group_id}">
     <input type="text" class="task-name" value="${task.name}">
-
-    <label>開始日
-    <input type="date" class="edit_start_date" value="${task.start.split('T')[0]}"></label>
-
-    <label>終了日
-    <input type="date" class="edit_end_date" value="${task.end.split('T')[0]}"></label>
-
+    <label>開始日</label><input type="date" class="edit_start_date" value="${task.start.split('T')[0]}">
+    <label>終了日</label><input type="date" class="edit_end_date" value="${task.end.split('T')[0]}">
     <button class="progress_task_edit">編集</button>
     <button class="progress_task_delete">削除</button>
     `;

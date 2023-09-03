@@ -1,24 +1,46 @@
 <%= render "shared/header2" %>
-<h1><%= @post_presenter[:title] %></h1>
-<% if @post_presenter[:images].attached? %>
-  <% @post_presenter[:images].each do |image| %>
-    <div><%= image_tag image, class: 'post-image' %><div>
-  <% end %>
-<% end %>
-<p><%= @post_presenter[:content] %></p>
-<p>Posted by: <%= @post_presenter[:name] %></p>
-<p>Posted at: <%= @post_presenter[:posted_at] %></p>
-<p>Progress Group: <%= @post_presenter[:niche_progress_group_name] %></p>
-<p>Progress Task: <%= @post_presenter[:progress_task_name] %></p>
-<p>Rate: <%= @post_presenter[:rate] %>％</p>
-<h2>Parameters</h2>
-<ul>
-  <% @post_presenter[:parameters].each do |parameter| %>
-    <li>
-      <%= parameter[:name] %>: <%= parameter[:value] %><%= parameter[:unit] %>
-    </li>
-  <% end %>
-</ul>
-<%= link_to '編集', edit_niche_post_path(niche_id: @post_presenter[:niche_id], id: @post_presenter[:id]) %>
-<!-- 他の属性も同様に表示することができます。 -->
+<div class="content-wrapper">
+  <div class="post-container">
+    <h1 class="post-title"><%= @post_presenter[:title] %></h1>
+    
+    <% if @post_presenter[:images].attached? %>
+      <div class="post-images">
+        <% @post_presenter[:images].each do |image| %>
+          <div class="post-image-container">
+            <%= image_tag image, class: 'post-image' %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="post-content-box">
+      <p><%= @post_presenter[:content] %></p>
+    </div>
+
+    <p class="post-details">投稿者：<%= @post_presenter[:name] %></p>
+    <p class="post-details">投稿日時：<%= @post_presenter[:posted_at] %></p>
+    <div class="post-parameters">
+      <p>進捗</p>
+      <ul>
+        <li class="parameter-item">
+          [ グループ：<%= @post_presenter[:niche_progress_group_name] %> ]
+          [ タスク：<%= @post_presenter[:progress_task_name] %> ]
+          進捗率：<%= @post_presenter[:rate] %>％
+        </li>
+      </ul>
+      <p>パラメーター</p>
+      <ul>
+        <% @post_presenter[:parameters].each do |parameter| %>
+          <li class="parameter-item">
+            <%= parameter[:name] %>: <%= parameter[:value] %><%= parameter[:unit] %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="post-actions">
+      <%= link_to '編集', edit_niche_post_path(niche_id: @niche.id, id: @post_presenter[:id]), class: 'btn btn-edit' %>
+    </div>
+  </div>
+</div>
 <%= render "shared/footer" %>
