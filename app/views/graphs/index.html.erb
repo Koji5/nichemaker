@@ -1,0 +1,13 @@
+<%= javascript_pack_tag 'view_chart' %>
+<%= render "shared/header2" %>
+<div class="tab">
+  <%= link_to '新着', niche_path(@niche), method: :get %>
+  <%= link_to 'ガントチャート', niche_gantts_path(@niche) %>
+  <span class="active-tab">グラフ</span>
+</div>
+<div class="content-wrapper-tab">
+  <div class="niche-container">
+    <canvas id="myChart"></canvas>
+  </div>
+</div>
+<%= render "shared/footer" %>

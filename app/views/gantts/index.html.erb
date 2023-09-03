@@ -1,0 +1,18 @@
+<%= javascript_pack_tag 'view_gantt' %>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function() {
+    initializeTasks(<%= @gantts.to_json.html_safe %>);
+  });
+</script>
+<%= render "shared/header2" %>
+<div class="tab">
+  <%= link_to '新着', niche_path(@niche), method: :get %>
+  <span class="active-tab">ガントチャート</span>
+  <%= link_to 'グラフ', niche_graphs_path(@niche) %>
+</div>
+<div class="content-wrapper-tab">
+  <div class="niche-container">
+    <svg id="gantt"></svg>
+  </div>
+</div>
+<%= render "shared/footer" %>

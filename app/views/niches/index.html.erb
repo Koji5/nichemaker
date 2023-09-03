@@ -1,31 +1,34 @@
 <%= render "shared/header" %>
-<div>
-  <div>
-    <h2>ピックアップカテゴリー</h2>
-    <div>
-      新規作成ニッチ
-    </div>
-    <ul>
-      <% if @niches.present? %>
-        <% @niches.each do |niche| %>
-          <li>
-            <%= link_to niche_path(niche), method: :get do %>
-            <div>
-              <h3>
-                <%= niche.title %>
-              </h3>
-              <div>
-                <%= niche.info %>
-              </div>
-            </div>
-            <% end %>
-          </li>
+<div class="content-wrapper">
+  <div class="niche-container">
+    <h2 class="category-title">ピックアップカテゴリー</h2>
+    
+    <div class="niche-section">
+      <div class="niche-label">新着ニッチ</div>
+      
+      <ul class="new_niche">
+        <% if @niches.present? %>
+          <% @niches.each do |niche| %>
+            <li class="my_niche">
+              <%= link_to niche_path(niche), method: :get do %>
+                <div class="niche-content">
+                  <h3 class="niche-title">
+                    <%= niche.title %>
+                  </h3>
+                  <div class="niche-info">
+                    <%= niche.info %>
+                  </div>
+                </div>
+              <% end %>
+            </li>
+          <% end %>
         <% end %>
-      <% end %>
-    </ul>
+      </ul>
+    </div>
   </div>
-</div>
-<div>
-  <%= link_to '作成する', new_niche_path %>
+
+  <div class="create-btn-container">
+    <%= link_to '新規作成', new_niche_path, class: 'create-btn' %>
+  </div>
 </div>
 <%= render "shared/footer" %>

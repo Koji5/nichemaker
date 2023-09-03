@@ -1,0 +1,65 @@
+<%= render "shared/header2" %>
+
+<% attached_images_data = @post_form.images.map { |image| { url: rails_blob_url(image), id: image.id, filename: image.filename.to_s } } %>
+<script>
+  var attachedImagesData = <%= raw attached_images_data.to_json %>;
+</script>
+<div class="content-wrapper">
+  <div class="niche-container">
+    <h2 class="category-title"><%= @post_form.title %> - 投稿編集ページ</h2>
+    <div class="form-border">
+    <%= form_with model: @post_form, url: niche_post_path(niche_id: @post_form.niche_id, id: @post_form.id), method: :patch, id: 'post-form', local: true, html: { enctype: "multipart/form-data" } do |f| %>
+      <%= render 'error_messages', model: @post_form %>
+
+      <div class="form-group">
+        <label>投稿タイトル</label>
+        <%= f.text_field :title, class: 'form-input' %>
+      </div>
+
+      <div class="form-group">
+        <label>投稿画像</label>
+        <div id="image-display-area" class="image-display"></div>
+        <div id="deleted-images"></div>
+        <button type="button" id="add-image-button" class="btn">画像を追加</button>
+        <%= f.file_field :images, name: 'images[]', multiple: true, style: "display: none;" %>
+      </div>
+
+      <div class="form-group">
+        <label>投稿文</label>
+        <%= f.text_area :content, rows: "7", maxlength: "1000", class: 'form-input' %>
+      </div>
+
+      <div class="form-group">
+        <label for="post_form_posted_at">投稿日</label>
+        <%= f.date_field :posted_at, value: f.object.posted_at || Date.today, class: 'form-input' %>
+      </div>
+      <div class="form-group"><label>進捗率</label></div>
+      <div class="input-group">
+        <%= f.collection_select(:niche_progress_group_id, @post_form.niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select", class: "form-input"}) %>
+        <%= f.collection_select(:niche_progress_task_id, @post_form.niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select", class: "form-input"}) %>
+        <%= f.text_field :rate, class: 'form-input' %>％
+      </div>
+
+      <% if @post_form.niche_parameters.present? %>
+        <div class="form-group"><label>パラメーター</label></div>
+          <% @post_form.niche_parameters.each_with_index do |niche_parameter, index| %>
+            <%= f.fields_for "post_parameter_params[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
+              <div class="input-group">
+                  <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
+                  <label><%= niche_parameter.name %></label>
+                  <%= post_parameter_fields.text_field :value, class: 'form-input' %>
+                  <%= niche_parameter.unit %>
+              </div>
+            <% end %>
+          <% end%>
+      <% end %>
+
+      <div class="post-actions">
+        <%= f.submit "更新する", class: 'post-submit-button' %>
+      </div>
+      <%= f.hidden_field :niche_id, value: @post_form.niche_id, id: 'niche_id' %>
+    <% end %>
+    </div>
+  </div>
+</div>
+<%= render "shared/footer" %>

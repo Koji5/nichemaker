@@ -1,0 +1,113 @@
+<%= render "shared/header2" %>
+<div class="content-wrapper">
+  <div class="niche-container">
+    <div class="category-title"><%= @niche.title %>の編集</div>
+    <div class="category-subtitle">基本情報</div>
+    <div class="form-border">
+    <%= form_with model: @niche, url: niche_path(@niche), local: true do |f| %>
+      <div class="form-group">
+        <label>タイトル：</label>
+        <%= f.text_field :title, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <label>説明：</label>
+        <%= f.text_area :info ,rows:"7", class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <label>管理者名：</label>
+        <%= f.text_field :admin_name, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <label>進捗状況機能使用：</label>
+        <%= f.collection_select(:progress_setting, HChoice.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div>
+      <div class="form-group">
+        <label>独自パラメーター機能使用：</label>
+        <%= f.collection_select(:parameter_setting, HChoice.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div>
+      <div class="form-group">
+        <label>タグ機能使用：</label>
+        <%= f.collection_select(:tag_setting, HChoice.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div>
+      <div class="form-group">
+        <label>いいね！機能使用：</label>
+        <%= f.collection_select(:nice_setting, HChoice.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div>
+      <div class="form-group">
+        <label>公開範囲：</label>
+        <%= f.collection_select(:publish_range, HPermissibleRange.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div>
+      <div class="form-group">
+        <label>投稿可能範囲：</label>
+        <%= f.collection_select(:topic_range, HPermissibleRange.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div>
+      <div class="form-group">
+        <label>コメント可能範囲：</label>
+        <%= f.collection_select(:comment_range, HPermissibleRange.all, :id, :name, {}, {class: 'form-control'}) %>
+      </div> 
+      <div class="form-group">
+        <%= f.submit "編集する", class: 'niche-edit-btn' %>
+      </div>
+    <% end %>
+    </div>
+    <div class="category-subtitle">進捗グループ</div>
+    <div class="form-border">
+      <div class="input-group">
+        <input type="text" id="progress_group_input">
+        <button id="add_progress_group">追加する</button>
+      </div>
+      <ul id="progress_group_list">
+        <% @niche_progress_groups.each do |niche_progress_group| %>
+          <li data-id="<%= niche_progress_group.id %>" class="list-item">
+            <input type="text" value="<%= niche_progress_group.name %>">
+            <button class="progress_group_edit">編集</button>
+            <button class="progress_group_delete">削除</button>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="category-subtitle">進捗タスク</div>
+    <div class="form-border">
+      <div class="input-group">
+        <%= select_tag :niche_progress_group_id, options_from_collection_for_select(@niche_progress_groups, :id, :name) %>
+        <input type="text" id="progress_task_input">
+        <label>開始日</label><input type="date" id="add_start_date" value="<%= Date.today.iso8601 %>">
+        <label>終了日</label><input type="date" id="add_end_date" value="<%= Date.today.iso8601 %>">
+        <button id="add_progress_task">追加する</button>
+      </div>
+      <ul id="progress_task_list">
+        <% @niche_progress_tasks.each do |niche_progress_task| %>
+          <li data-id="<%= niche_progress_task.id %>" class="list-item">
+            <label><%= niche_progress_task.group_name %></label>
+            <input type="hidden" class="group-id" value="<%= niche_progress_task.niche_progress_group_id %>">
+            <input type="text" class="task-name" value="<%= niche_progress_task.name %>">
+            <label>開始日</label><input type="date" class="edit_start_date" value="<%= niche_progress_task.start.strftime('%Y-%m-%d') %>">
+            <label>終了日</label><input type="date" class="edit_end_date" value="<%= niche_progress_task.end.strftime('%Y-%m-%d') %>">
+            <button class="progress_task_edit">編集</button>
+            <button class="progress_task_delete">削除</button>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="category-subtitle">グラフパラメーター項目</div>
+    <div class="form-border">
+      <div class="input-group">
+        <label>項目名</label><input type="text" id="parameter_name_input">
+        <label>単位</label><input type="text" id="parameter_unit_input">
+        <button id="add_parameter">追加する</button>
+      </div>
+      <ul id="parameter_list">
+        <% @niche_parameters.each do |niche_parameter| %>
+          <li data-id="<%= niche_parameter.id %>" class="list-item">
+            <label>項目名</label><input type="text" value="<%= niche_parameter.name %>">
+            <label>単位</label><input type="text" value="<%= niche_parameter.unit %>">
+            <button class="parameter_edit">編集</button>
+            <button class="parameter_delete">削除</button>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <input type="hidden" id="niche_id" value="<%= @niche.id %>">
+</div>
+<%= render "shared/footer" %>
