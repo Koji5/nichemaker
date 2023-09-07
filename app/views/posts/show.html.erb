@@ -13,29 +13,33 @@
       </div>
     <% end %>
 
-    <div class="post-content-box">
-      <p><%= @post_presenter[:content] %></p>
-    </div>
-
     <p class="post-details">投稿者：<%= @post_presenter[:name] %></p>
     <p class="post-details">投稿日時：<%= @post_presenter[:posted_at] %></p>
     <div class="post-parameters">
-      <p>進捗</p>
-      <ul>
-        <li class="parameter-item">
-          [ グループ：<%= @post_presenter[:niche_progress_group_name] %> ]
-          [ タスク：<%= @post_presenter[:progress_task_name] %> ]
-          進捗率：<%= @post_presenter[:rate] %>％
-        </li>
-      </ul>
-      <p>パラメーター</p>
-      <ul>
-        <% @post_presenter[:parameters].each do |parameter| %>
+      <% if @post_presenter[:rate].present? %>
+        <p>進捗</p>
+        <ul>
           <li class="parameter-item">
-            <%= parameter[:name] %>: <%= parameter[:value] %><%= parameter[:unit] %>
+            [ グループ：<%= @post_presenter[:niche_progress_group_name] %> ]
+            [ タスク：<%= @post_presenter[:progress_task_name] %> ]
+            進捗率：<%= @post_presenter[:rate] %>％
           </li>
-        <% end %>
-      </ul>
+        </ul>
+      <% end %>
+      <% if @post_presenter[:parameters].present? %>
+        <p>パラメーター</p>
+        <ul>
+          <% @post_presenter[:parameters].each do |parameter| %>
+            <li class="parameter-item">
+              <%= parameter[:name] %>: <%= parameter[:value] %><%= parameter[:unit] %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+
+    <div class="post-content-box">
+      <p><%= @post_presenter[:content] %></p>
     </div>
 
     <div class="post-actions">

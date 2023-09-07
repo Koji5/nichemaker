@@ -33,12 +33,14 @@
         <label for="post_form_posted_at">投稿日</label>
         <%= f.date_field :posted_at, value: f.object.posted_at || Date.today, class: 'form-input' %>
       </div>
-      <div class="form-group"><label>進捗率</label></div>
-      <div class="input-group">
-        <%= f.collection_select(:niche_progress_group_id, @post_form.niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select", class: "form-input"}) %>
-        <%= f.collection_select(:niche_progress_task_id, @post_form.niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select", class: "form-input"}) %>
-        <%= f.text_field :rate, class: 'form-input' %>％
-      </div>
+      <% if @post_form.niche_progress_groups.present? && @post_form.niche_progress_tasks.present? %>
+        <div class="form-group"><label>進捗率</label></div>
+        <div class="input-group">
+          <%= f.collection_select(:niche_progress_group_id, @post_form.niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select", class: "form-input"}) %>
+          <%= f.collection_select(:niche_progress_task_id, @post_form.niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select", class: "form-input"}) %>
+          <%= f.text_field :rate, class: 'form-input' %>％
+        </div>
+      <% end %>
 
       <% if @post_form.niche_parameters.present? %>
         <div class="form-group"><label>パラメーター</label></div>
@@ -46,9 +48,9 @@
             <%= f.fields_for "post_parameter_params[]", @post_form.post_parameters_by_niche[index] do |post_parameter_fields| %>
               <div class="input-group">
                   <%= post_parameter_fields.hidden_field :niche_parameter_id, value: niche_parameter.id %>
-                  <label><%= niche_parameter.name %></label>
+                  <%= niche_parameter.name %>：
                   <%= post_parameter_fields.text_field :value, class: 'form-input' %>
-                  <%= niche_parameter.unit %>
+                  （単位：<%= niche_parameter.unit %>）
               </div>
             <% end %>
           <% end%>

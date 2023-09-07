@@ -24,12 +24,14 @@
         <label>投稿日</label>
         <%= f.date_field :posted_at, value: f.object.posted_at || Date.today, class: 'form-input' %>
       </div>
+      <% if @post_form.niche_progress_groups.present? && @post_form.niche_progress_tasks.present? %>
       <div class="form-group"><label>進捗率</label></div>
       <div class="input-group">
         <%= f.collection_select(:niche_progress_group_id, @post_form.niche_progress_groups, :id, :name, {}, {id:"niche_progress_group_select", class: "form-input"}) %>
         <%= f.collection_select(:niche_progress_task_id, @post_form.niche_progress_tasks, :id, :name, {}, {id:"niche_progress_task_select", class: "form-input"}) %>
         <%= f.text_field :rate, class: 'form-input' %>％
       </div>
+      <% end %>
       <% if @post_form.niche_parameters.present? %>
         <div class="form-group"><label>パラメーター</label></div>
           <% @post_form.niche_parameters.each do |niche_parameter| %>
@@ -41,14 +43,15 @@
                   （単位：<%= niche_parameter.unit %>）
               </div>
             <% end %>
-          <% end%>
+          <% end %>
       <% end %>
       <div class="form-group submit-btn">
         <%= f.submit "作成する", class: 'btn' %>
       </div>
-      <%= f.hidden_field :niche_id, value: @post_form.niche.id, id: 'niche_id' %>
     <% end %>
     </div>
+    <%#= f.hidden_field :niche_id, value: @niche.id, id: 'niche_id' %>
+    <input type="hidden" value="<%= @post_form.niche_id %>" id="niche_id">
   </div>
 </div>
 <%= render "shared/footer" %>

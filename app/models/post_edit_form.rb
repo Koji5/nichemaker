@@ -24,7 +24,6 @@ class PostEditForm
     :rate,
     :niche_progress_task_id,
     :niche_progress_group_id,
-    :post_parameter_params,
     :user_id
   )
 
@@ -38,19 +37,30 @@ class PostEditForm
     if params[:edit]
       self.niche_title = Niche.find(params[:niche_id]).title
       self.niche_progress_groups = NicheProgressGroup.where(niche_id: params[:niche_id]).order(:name)
+      if niche_progress_groups
+        progress_rate = ProgressRate.where(post_id: params[:id]).first
+        self.rate = progress_rate&.rate
+        if rate
+          self.niche_progress_task_id = progress_rate&.niche_progress_task_id
+        end
+        if niche_progress_task_id
+          self.niche_progress_group_id = NicheProgressTask.find(niche_progress_task_id)&.niche_progress_group_id
+        end
+        self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_group_id).order(:name)
+      end
       self.niche_parameters = NicheParameter.where(niche_id: params[:niche_id]).order(:name)
       self.post_parameter = PostParameter.new
-      progress_rate = ProgressRate.where(post_id: params[:id]).first
-      self.rate = progress_rate&.rate
-      self.niche_progress_task_id = progress_rate&.niche_progress_task_id
-      self.niche_progress_group_id = NicheProgressTask.find(niche_progress_task_id)&.niche_progress_group_id
-      self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_group_id).order(:name)
-      self.post_parameters_by_niche = self.niche_parameters.map do |niche_parameter|
-        PostParameter.find_by(niche_parameter_id: niche_parameter.id, post_id: params[:id]) || PostParameter.new
-        #(niche_parameter_id: niche_parameter.id, post_id: params[:id])
+      # 初期化または適切な場所で空の配列を作成
+      self.post_parameters_by_niche = []
+
+      self.niche_parameters.each do |niche_parameter|
+        post_parameter = PostParameter.find_by(niche_parameter_id: niche_parameter.id, post_id: params[:id]) || PostParameter.new
+        self.post_parameters_by_niche << post_parameter
       end
     end
     super(params)
+    @post_parameter_params = params[:post_parameter_params]
+    binding.pry
   end
 
   
@@ -75,25 +85,28 @@ class PostEditForm
       post.images.attach(images) if images.present?
 
       # PostParameterの保存
-      post_parameter_params = post_parameter_params || []
-      post_parameter_params.each do |post_parameter_param|
-        post_parameter = PostParameter.find_or_initialize_by(
-          niche_parameter_id: post_parameter_param[:niche_parameter_id],
+    binding.pry
+      @post_parameter_params = @post_parameter_params || []
+      @post_parameter_params.each do |_key, param|
+        my_post_parameter = PostParameter.find_or_initialize_by(
+          niche_parameter_id: param["niche_parameter_id"],  # シンボルのキーから文字列のキーに変更
           post_id: post.id
         )
-        post_parameter.assign_attributes(post_parameter_param)
-        post_parameter.save!
+        my_post_parameter.assign_attributes(param)
+        my_post_parameter.save!
       end
 
       # ProgressRateの保存
-      progress_rate = ProgressRate.find_or_initialize_by(
-        post_id: post.id
-      )
-      progress_rate.assign_attributes(
-        rate: rate,
-        niche_progress_task_id: niche_progress_task_id
-      )
-      progress_rate.save!
+      if rate.present? && niche_progress_task_id.present?
+        progress_rate = ProgressRate.find_or_initialize_by(
+          post_id: post.id
+        )
+        progress_rate.assign_attributes(
+          rate: rate,
+          niche_progress_task_id: niche_progress_task_id
+        )
+        progress_rate.save!
+      end
     end
   end
 end

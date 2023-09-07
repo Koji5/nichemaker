@@ -23,7 +23,7 @@
   align-items: center;
   margin-bottom: 10px;
 
-  select, input, label, button {
+  select, input, label, button,a {
     margin: 5px;
     padding: 5px;
     border-radius: 3px;
@@ -179,7 +179,7 @@
 
 // ニッチコンテナのスタイル
 .niche-container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px ;
 }
@@ -202,14 +202,16 @@
   flex-wrap: wrap;  // 折り返しを有効にする
 
   .my_niche {
+    background-color: lighten($bg-color, 7%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex-basis: calc(33.33% - 20px);  // 3列で表示させるための基本サイズ。間隔を考慮
-    border: 1px solid $primary-color;
+    border: 1px solid #ddd;
     margin: 10px;
-    padding: 15px;
+    padding: 0 15px 15px 15px;
+    border-radius: 30px;
     box-sizing: border-box;  // ボーダーを含むサイズに
     .niche-title {
-      font-size: 18px;
-      margin: 0;
+      font-size: 24px
     }
     .niche-info {
       margin-top: 10px;
@@ -302,5 +304,19 @@
 
   &:hover {
     background-color: darken($edit-color, 10%);
+  }
+}
+.niche-delete-btn {
+  background-color: $delete-color;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: darken($delete-color, 10%);
   }
 }

@@ -41,7 +41,10 @@ class PostNewForm
       self.niche_progress_groups = NicheProgressGroup.where(niche_id: params[:niche_id]).order(:name)
       self.niche_parameters = NicheParameter.where(niche_id: params[:niche_id]).order(:name)
       self.post_parameter = PostParameter.new
-      self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: niche_progress_groups&.first.id).order(:name)
+      first_group = niche_progress_groups&.first
+      if first_group
+        self.niche_progress_tasks = NicheProgressTask.where(niche_progress_group_id: first_group).order(:name)
+      end
     end
     super(params)
   end
@@ -73,11 +76,13 @@ class PostNewForm
       end
 
       # ProgressRateの保存
-       ProgressRate.create!(
-         rate: rate,
-         niche_progress_task_id: niche_progress_task_id,
-         post_id: post_id
-       )
+      if rate
+         ProgressRate.create!(
+          rate: rate,
+          niche_progress_task_id: niche_progress_task_id,
+          post_id: post_id
+        )
+      end
 
     end
   end

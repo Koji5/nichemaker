@@ -45,8 +45,8 @@
         <label>コメント可能範囲：</label>
         <%= f.collection_select(:comment_range, HPermissibleRange.all, :id, :name, {}, {class: 'form-control'}) %>
       </div> 
-      <div class="form-group">
-        <%= f.submit "編集する", class: 'niche-edit-btn' %>
+      <div class="input-group">
+        <%= f.submit "編集する", class: 'niche-edit-btn' %> <%= link_to "削除する", niche_path(@niche), method: :delete, class: 'niche-delete-btn' %>
       </div>
     <% end %>
     </div>

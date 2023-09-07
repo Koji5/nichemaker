@@ -39,6 +39,11 @@ class NichesController < ApplicationController
   end
 
   def destroy
+    if @niche.destroy
+      redirect_to root_path
+    else
+      render :edit
+    end
   end
 
   private
