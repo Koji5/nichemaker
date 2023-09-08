@@ -13,14 +13,14 @@
             <%= link_to niche_post_path(@niche, post), method: :get do %>
               <div class="post-image">
                 <% if post.images.attached? %>
-                  <%= image_tag post.images.first %>
+                  <%= image_tag post.images.first.variant(resize_to_fill: [320, 180]) %>
                 <% end %>
               </div>
               <h3 class="post-title">
                 <%= post.title %>
               </h3>
               <div class="post-content">
-                <%= post.content %>
+                <%= truncate(post.content, length: 100) %>
               </div>
             <% end %>
           </li>

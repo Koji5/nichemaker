@@ -16,7 +16,7 @@
                     <%= niche.title %>
                   </h3>
                   <div class="niche-info">
-                    <%= niche.info %>
+                    <%= truncate(niche.info, length: 150) %>
                   </div>
                 </div>
               <% end %>

@@ -60,7 +60,6 @@ class PostEditForm
     end
     super(params)
     @post_parameter_params = params[:post_parameter_params]
-    binding.pry
   end
 
   
@@ -85,7 +84,6 @@ class PostEditForm
       post.images.attach(images) if images.present?
 
       # PostParameterの保存
-    binding.pry
       @post_parameter_params = @post_parameter_params || []
       @post_parameter_params.each do |_key, param|
         my_post_parameter = PostParameter.find_or_initialize_by(

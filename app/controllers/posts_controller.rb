@@ -39,6 +39,16 @@ class PostsController < ApplicationController
     end
   end
 
+  def destroy
+    post = Post.find(params[:id])
+    @niche = Niche.find(params[:niche_id])
+    @post_form = PostEditForm.new(edit_attributes(post))
+    if post.destroy
+      redirect_to niche_path(@niche)
+    else
+      render :edit
+    end
+  end
   private
 
   def edit_attributes(post)

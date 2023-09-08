@@ -6,20 +6,35 @@ document.addEventListener("DOMContentLoaded", function() {
   new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['2023/8/9', '2023/8/10', '2023/8/11', '2023/8/12', '2023/8/13', '2023/8/14'],
+      labels: ['2023/8/9', '2023/8/10', '2023/8/11', '2023/8/12', '2023/8/13'],
       datasets: [
       {
-        label: '攻撃力',
-        data: [1, 3, 5, 6, 9, 10],
+        label: 'HP',
+        data: [30, 50, 70, 85, 100],
         borderWidth: 1
       } , {
-        label: '防御力',
-        data: [2, 3, 4, 5, 7, 10],
+        label: 'EN',
+        data: [15, 30, 55, 75, 85],
         borderWidth: 1
  
       } , {
-        label: '俊敏',
-        data: [0, 1, 2, 10, 11, 11],
+        label: '装甲値',
+        data: [40, 52, 63, 78, 100],
+        borderWidth: 1
+ 
+      } , {
+        label: '運動性',
+        data: [20, 35, 42, 58, 75],
+        borderWidth: 1
+ 
+      } , {
+        label: '照準値',
+        data: [20, 38, 52, 78, 85],
+        borderWidth: 1
+ 
+      } , {
+        label: '武器',
+        data: [10, 25, 65, 78, 99],
         borderWidth: 1
  
       }
